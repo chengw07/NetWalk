@@ -24,4 +24,10 @@ virtualenv --system-site-packages -p python3.6 ./venv source ./venv/bin/activate
 
 3). install tensorflow refer to https://www.tensorflow.org/install/
 
-4). install packages pip install networkx pip install scipy pip install matplotlib pip install numpy pip install tqdm pip sklearn
+4). install packages 
+        pip install networkx 
+        pip install scipy 
+        pip install matplotlib 
+        pip install numpy 
+        pip install tqdm 
+        pip sklearn
