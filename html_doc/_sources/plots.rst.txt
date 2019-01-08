@@ -1,0 +1,38 @@
+plots package
+=============
+
+Submodules
+----------
+
+plots.DynamicUpdate module
+--------------------------
+
+.. automodule:: plots.DynamicUpdate
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+plots.viz\_karate module
+------------------------
+
+.. automodule:: plots.viz_karate
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+plots.viz\_stream module
+------------------------
+
+.. automodule:: plots.viz_stream
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: plots
+    :members:
+    :undoc-members:
+    :show-inheritance:

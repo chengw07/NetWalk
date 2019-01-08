@@ -1,0 +1,695 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="english" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="english" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>framework package &mdash; NetWalk  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> NetWalk
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">framework package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-framework.DenoisingAE">framework.DenoisingAE module</a></li>
+<li><a class="reference internal" href="#module-framework.Model">framework.Model module</a></li>
+<li><a class="reference internal" href="#module-framework.anomaly_detection">framework.anomaly_detection module</a></li>
+<li><a class="reference internal" href="#module-framework.anomaly_detection_stream">framework.anomaly_detection_stream module</a></li>
+<li><a class="reference internal" href="#module-framework.anomaly_generation">framework.anomaly_generation module</a></li>
+<li><a class="reference internal" href="#module-framework.graph">framework.graph module</a></li>
+<li><a class="reference internal" href="#module-framework.imports">framework.imports module</a></li>
+<li><a class="reference internal" href="#module-framework.load_email_eu">framework.load_email_eu module</a></li>
+<li><a class="reference internal" href="#module-framework.netwalk_update">framework.netwalk_update module</a></li>
+<li><a class="reference internal" href="#framework-util-module">framework.util module</a></li>
+<li><a class="reference internal" href="#framework-walks-module">framework.walks module</a></li>
+<li><a class="reference internal" href="#module-framework">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">NetWalk</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>framework package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/framework.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="framework-package">
+<h1>framework package<a class="headerlink" href="#framework-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-framework.DenoisingAE">
+<span id="framework-denoisingae-module"></span><h2>framework.DenoisingAE module<a class="headerlink" href="#module-framework.DenoisingAE" title="Permalink to this headline">¶</a></h2>
+<p>Created on: 2018-12-24
+License: BSD 3 clause</p>
+<p>Copyright (C) 2018
+Author: Wei Cheng &lt;<a class="reference external" href="mailto:weicheng&#37;&#52;&#48;nec-labs&#46;com">weicheng<span>&#64;</span>nec-labs<span>&#46;</span>com</a>&gt;
+Affiliation: NEC Labs America</p>
+<dl class="function">
+<dt id="framework.DenoisingAE.autoencoder">
+<code class="descclassname">framework.DenoisingAE.</code><code class="descname">autoencoder</code><span class="sig-paren">(</span><em>data</em>, <em>corrupt_prob</em>, <em>dimensions</em>, <em>beta=0.01</em>, <em>rho=0.4</em>, <em>activation=&lt;function sigmoid&gt;</em>, <em>lamb=0.01</em>, <em>gamma=0.01</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/framework/DenoisingAE.html#autoencoder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.DenoisingAE.autoencoder" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="framework.DenoisingAE.corrupt">
+<code class="descclassname">framework.DenoisingAE.</code><code class="descname">corrupt</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/framework/DenoisingAE.html#corrupt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.DenoisingAE.corrupt" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-framework.Model">
+<span id="framework-model-module"></span><h2>framework.Model module<a class="headerlink" href="#module-framework.Model" title="Permalink to this headline">¶</a></h2>
+<p>Created on: 2018-12-24
+License: BSD 3 clause</p>
+<p>Copyright (C) 2018
+Author: Wei Cheng &lt;<a class="reference external" href="mailto:weicheng&#37;&#52;&#48;nec-labs&#46;com">weicheng<span>&#64;</span>nec-labs<span>&#46;</span>com</a>&gt;
+Affiliation: NEC Labs America</p>
+<dl class="class">
+<dt id="framework.Model.Model">
+<em class="property">class </em><code class="descclassname">framework.Model.</code><code class="descname">Model</code><span class="sig-paren">(</span><em>activation</em>, <em>dimension</em>, <em>walk_len</em>, <em>nodeNum</em>, <em>gama</em>, <em>lamb</em>, <em>beta</em>, <em>rho</em>, <em>epoch</em>, <em>batch_size</em>, <em>learning_rate</em>, <em>optimizer_type</em>, <em>corrupt_prob</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/framework/Model.html#Model"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.Model.Model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="method">
+<dt id="framework.Model.Model.batchify">
+<code class="descname">batchify</code><span class="sig-paren">(</span><em>data</em>, <em>bsz</em>, <em>shuffle=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/framework/Model.html#Model.batchify"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.Model.Model.batchify" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>data</strong> -- training walks sets, that is a list of node walk chain, each chain is a list of nodes</li>
+<li><strong>bsz</strong> -- batch size</li>
+<li><strong>shuffle</strong> -- indicator of if reshuffle training set then split it to batches</li>
+<li><strong>gpu</strong> -- if conduct in gpu</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">batches of training samples(walks)</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="framework.Model.Model.clique_embedding_loss">
+<code class="descname">clique_embedding_loss</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/framework/Model.html#Model.clique_embedding_loss"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.Model.Model.clique_embedding_loss" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="framework.Model.Model.feedforward_autoencoder">
+<code class="descname">feedforward_autoencoder</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/framework/Model.html#Model.feedforward_autoencoder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.Model.Model.feedforward_autoencoder" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="framework.Model.Model.fit">
+<code class="descname">fit</code><span class="sig-paren">(</span><em>data_train</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/framework/Model.html#Model.fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.Model.Model.fit" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="framework.Model.Model.print_loss">
+<code class="descname">print_loss</code><span class="sig-paren">(</span><em>loss_evaled</em>, <em>cl</em>, <em>ae</em>, <em>kl</em>, <em>weight_loss</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/framework/Model.html#Model.print_loss"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.Model.Model.print_loss" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="framework.Model.Model.sigmoid">
+<code class="descname">sigmoid</code><span class="sig-paren">(</span><em>x</em>, <em>derivative=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/framework/Model.html#Model.sigmoid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.Model.Model.sigmoid" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-framework.anomaly_detection">
+<span id="framework-anomaly-detection-module"></span><h2>framework.anomaly_detection module<a class="headerlink" href="#module-framework.anomaly_detection" title="Permalink to this headline">¶</a></h2>
+<p>Created on: 2018-12-24
+License: BSD 3 clause</p>
+<p>Copyright (C) 2018
+Author: Wei Cheng &lt;<a class="reference external" href="mailto:weicheng&#37;&#52;&#48;nec-labs&#46;com">weicheng<span>&#64;</span>nec-labs<span>&#46;</span>com</a>&gt;
+Affiliation: NEC Labs America</p>
+<dl class="function">
+<dt id="framework.anomaly_detection.anomaly_detection">
+<code class="descclassname">framework.anomaly_detection.</code><code class="descname">anomaly_detection</code><span class="sig-paren">(</span><em>embedding</em>, <em>train</em>, <em>synthetic_test</em>, <em>k</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/framework/anomaly_detection.html#anomaly_detection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.anomaly_detection.anomaly_detection" title="Permalink to this definition">¶</a></dt>
+<dd><p>function anomaly_detection_stream(embedding, train, synthetic_test, k, alfa, n0, c0)
+#  the function generate codes of edges by combining embeddings of two
+#  nodes, and then using the testing codes of edges for anomaly detection
+#  Input: embedding: embeddings of each node; train: training edges; synthetic_test: testing edges with anomlies;</p>
+<blockquote>
+<div>k: number of clusters</div></blockquote>
+<p>#  return scores: The anomaly severity ranking, the top-ranked are the most likely anomlies
+#   auc: AUC score
+#   n:   number of nodes in each cluster
+#   c:   cluster centroids,
+#   res: id of nodes if their distance to nearest centroid is larger than that in the training set
+#   ab_score: anomaly score for the whole snapshot, just the sum of distances to their nearest centroids</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-framework.anomaly_detection_stream">
+<span id="framework-anomaly-detection-stream-module"></span><h2>framework.anomaly_detection_stream module<a class="headerlink" href="#module-framework.anomaly_detection_stream" title="Permalink to this headline">¶</a></h2>
+<p>Created on: 2018-12-24
+License: BSD 3 clause</p>
+<p>Copyright (C) 2018
+Author: Wei Cheng &lt;<a class="reference external" href="mailto:weicheng&#37;&#52;&#48;nec-labs&#46;com">weicheng<span>&#64;</span>nec-labs<span>&#46;</span>com</a>&gt;
+Affiliation: NEC Labs America</p>
+<dl class="function">
+<dt id="framework.anomaly_detection_stream.anomaly_detection_stream">
+<code class="descclassname">framework.anomaly_detection_stream.</code><code class="descname">anomaly_detection_stream</code><span class="sig-paren">(</span><em>embedding</em>, <em>train</em>, <em>synthetic_test</em>, <em>k</em>, <em>alfa</em>, <em>n0</em>, <em>c0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/framework/anomaly_detection_stream.html#anomaly_detection_stream"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.anomaly_detection_stream.anomaly_detection_stream" title="Permalink to this definition">¶</a></dt>
+<dd><p>function anomaly_detection_stream(embedding, train, synthetic_test, k, alfa, n0, c0)
+#  the function generate codes of edges by combining embeddings of two
+#  nodes, and then using the testing codes of edges for anomaly detection
+#  Input: embedding: embeddings of each node; train: training edges; synthetic_test: testing edges with anomlies;</p>
+<blockquote>
+<div>k: number of clusters; alfa: updating rate; n0: last round number of nodes in each cluster;
+c0: cluster centroids in last round</div></blockquote>
+<p>#  return scores: The anomaly severity ranking, the top-ranked are the most likely anomlies
+#   auc: AUC score
+#   n:   number of nodes in each cluster
+#   c:   cluster centroids,
+#   res: id of nodes if their distance to nearest centroid is larger than that in the training set
+#   ab_score: anomaly score for the whole snapshot, just the sum of distances to their nearest centroids</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-framework.anomaly_generation">
+<span id="framework-anomaly-generation-module"></span><h2>framework.anomaly_generation module<a class="headerlink" href="#module-framework.anomaly_generation" title="Permalink to this headline">¶</a></h2>
+<p>Created on: 2018-12-24
+License: BSD 3 clause</p>
+<p>Copyright (C) 2018
+Author: Wei Cheng &lt;<a class="reference external" href="mailto:weicheng&#37;&#52;&#48;nec-labs&#46;com">weicheng<span>&#64;</span>nec-labs<span>&#46;</span>com</a>&gt;
+Affiliation: NEC Labs America</p>
+<dl class="function">
+<dt id="framework.anomaly_generation.anomaly_generation">
+<code class="descclassname">framework.anomaly_generation.</code><code class="descname">anomaly_generation</code><span class="sig-paren">(</span><em>ini_graph_percent</em>, <em>anomaly_percent</em>, <em>data</em>, <em>n</em>, <em>m</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/framework/anomaly_generation.html#anomaly_generation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.anomaly_generation.anomaly_generation" title="Permalink to this definition">¶</a></dt>
+<dd><p>generate anomaly
+split the whole graph into training network which includes parts of the
+whole graph edges(with ini_graph_percent) and testing edges that includes
+a ratio of manually injected anomaly edges, here anomaly edges mean that
+they are not shown in previous graph;</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>input: ini_graph_percent: percentage of edges in the whole graph will be</dt>
+<dd><blockquote class="first">
+<div>sampled in the intitial graph for embedding
+learning</div></blockquote>
+<dl class="docutils">
+<dt>anomaly_percent: percentage of edges in testing edges pool to be</dt>
+<dd>manually injected anomaly edges(previous not
+shown in the whole graph)</dd>
+<dt>data: whole graph matrix in sparse form, each row (nodeID,</dt>
+<dd>nodeID) is one edge of the graph</dd>
+</dl>
+<p class="last">n:  number of total nodes of the whole graph
+m:  number of edges in the whole graph</p>
+</dd>
+<dt>output: synthetic_test: the testing edges with injected abnormal edges,</dt>
+<dd><blockquote class="first">
+<div>each row is one edge (nodeID, nodeID, label),
+label==0 means the edge is normal one, label ==1
+means the edge is abnormal;</div></blockquote>
+<dl class="last docutils">
+<dt>train_mat: the training network with square matrix format, the training</dt>
+<dd>network edges for initial model training;</dd>
+<dt>train:  the sparse format of the training network, each row</dt>
+<dd>(nodeID, nodeID)</dd>
+</dl>
+</dd>
+</dl>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="framework.anomaly_generation.edgeList2Adj">
+<code class="descclassname">framework.anomaly_generation.</code><code class="descname">edgeList2Adj</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/framework/anomaly_generation.html#edgeList2Adj"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.anomaly_generation.edgeList2Adj" title="Permalink to this definition">¶</a></dt>
+<dd><p>converting edge list to graph adjacency matrix
+:param data: edge list
+:return: adjacency matrix which is symmetric</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="framework.anomaly_generation.processEdges">
+<code class="descclassname">framework.anomaly_generation.</code><code class="descname">processEdges</code><span class="sig-paren">(</span><em>fake_edges</em>, <em>data</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/framework/anomaly_generation.html#processEdges"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.anomaly_generation.processEdges" title="Permalink to this definition">¶</a></dt>
+<dd><p>remove self-loops and duplicates and order edge
+:param fake_edges: generated edge list
+:param data: orginal edge list
+:return: list of edges</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-framework.graph">
+<span id="framework-graph-module"></span><h2>framework.graph module<a class="headerlink" href="#module-framework.graph" title="Permalink to this headline">¶</a></h2>
+<p>Created on: 2018-12-24
+License: BSD 3 clause</p>
+<p>Copyright (C) 2018
+Author: Wei Cheng &lt;<a class="reference external" href="mailto:weicheng&#37;&#52;&#48;nec-labs&#46;com">weicheng<span>&#64;</span>nec-labs<span>&#46;</span>com</a>&gt;
+Affiliation: NEC Labs America</p>
+<dl class="class">
+<dt id="framework.graph.Graph">
+<em class="property">class </em><code class="descclassname">framework.graph.</code><code class="descname">Graph</code><a class="reference internal" href="_modules/framework/graph.html#Graph"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.graph.Graph" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/collections.html#collections.defaultdict" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">collections.defaultdict</span></code></a></p>
+<dl class="method">
+<dt id="framework.graph.Graph.adjacency_iter">
+<code class="descname">adjacency_iter</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/framework/graph.html#Graph.adjacency_iter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.graph.Graph.adjacency_iter" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="framework.graph.Graph.check_self_loops">
+<code class="descname">check_self_loops</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/framework/graph.html#Graph.check_self_loops"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.graph.Graph.check_self_loops" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="framework.graph.Graph.degree">
+<code class="descname">degree</code><span class="sig-paren">(</span><em>nodes=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/framework/graph.html#Graph.degree"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.graph.Graph.degree" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="framework.graph.Graph.has_edge">
+<code class="descname">has_edge</code><span class="sig-paren">(</span><em>v1</em>, <em>v2</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/framework/graph.html#Graph.has_edge"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.graph.Graph.has_edge" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="framework.graph.Graph.make_consistent">
+<code class="descname">make_consistent</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/framework/graph.html#Graph.make_consistent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.graph.Graph.make_consistent" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="framework.graph.Graph.make_undirected">
+<code class="descname">make_undirected</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/framework/graph.html#Graph.make_undirected"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.graph.Graph.make_undirected" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="framework.graph.Graph.nodes">
+<code class="descname">nodes</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/framework/graph.html#Graph.nodes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.graph.Graph.nodes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="framework.graph.Graph.number_of_edges">
+<code class="descname">number_of_edges</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/framework/graph.html#Graph.number_of_edges"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.graph.Graph.number_of_edges" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the number of nodes in the graph</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="framework.graph.Graph.number_of_nodes">
+<code class="descname">number_of_nodes</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/framework/graph.html#Graph.number_of_nodes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.graph.Graph.number_of_nodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the number of nodes in the graph</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="framework.graph.Graph.order">
+<code class="descname">order</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/framework/graph.html#Graph.order"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.graph.Graph.order" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the number of nodes in the graph</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="framework.graph.Graph.random_walk">
+<code class="descname">random_walk</code><span class="sig-paren">(</span><em>path_length</em>, <em>alpha=0</em>, <em>rand=&lt;random.Random object&gt;</em>, <em>start=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/framework/graph.html#Graph.random_walk"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.graph.Graph.random_walk" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a truncated random walk.</p>
+<p>path_length: Length of the random walk.
+alpha: probability of restarts.
+start: the start node of the random walk.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="framework.graph.Graph.remove_self_loops">
+<code class="descname">remove_self_loops</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/framework/graph.html#Graph.remove_self_loops"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.graph.Graph.remove_self_loops" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="framework.graph.Graph.subgraph">
+<code class="descname">subgraph</code><span class="sig-paren">(</span><em>nodes={}</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/framework/graph.html#Graph.subgraph"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.graph.Graph.subgraph" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="framework.graph.clique">
+<code class="descclassname">framework.graph.</code><code class="descname">clique</code><span class="sig-paren">(</span><em>size</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/framework/graph.html#clique"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.graph.clique" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="framework.graph.from_adjlist">
+<code class="descclassname">framework.graph.</code><code class="descname">from_adjlist</code><span class="sig-paren">(</span><em>adjlist</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/framework/graph.html#from_adjlist"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.graph.from_adjlist" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="framework.graph.from_adjlist_unchecked">
+<code class="descclassname">framework.graph.</code><code class="descname">from_adjlist_unchecked</code><span class="sig-paren">(</span><em>adjlist</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/framework/graph.html#from_adjlist_unchecked"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.graph.from_adjlist_unchecked" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="framework.graph.from_networkx">
+<code class="descclassname">framework.graph.</code><code class="descname">from_networkx</code><span class="sig-paren">(</span><em>G_input</em>, <em>undirected=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/framework/graph.html#from_networkx"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.graph.from_networkx" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="framework.graph.from_numpy">
+<code class="descclassname">framework.graph.</code><code class="descname">from_numpy</code><span class="sig-paren">(</span><em>x</em>, <em>undirected=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/framework/graph.html#from_numpy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.graph.from_numpy" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="framework.graph.generate_walk">
+<code class="descclassname">framework.graph.</code><code class="descname">generate_walk</code><span class="sig-paren">(</span><em>G</em>, <em>num_walks</em>, <em>walk_len</em>, <em>alpha=0</em>, <em>rand=&lt;random.Random object&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/framework/graph.html#generate_walk"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.graph.generate_walk" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="framework.graph.grouper">
+<code class="descclassname">framework.graph.</code><code class="descname">grouper</code><span class="sig-paren">(</span><em>3</em>, <em>'abcdefg'</em>, <em>'x') --&gt; ('a'</em>, <em>'b'</em>, <em>'c')</em>, <em>('d'</em>, <em>'e'</em>, <em>'f')</em>, <em>('g'</em>, <em>'x'</em>, <em>'x'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/framework/graph.html#grouper"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.graph.grouper" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="framework.graph.load_adjacencylist">
+<code class="descclassname">framework.graph.</code><code class="descname">load_adjacencylist</code><span class="sig-paren">(</span><em>file_</em>, <em>undirected=False</em>, <em>chunksize=10000</em>, <em>unchecked=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/framework/graph.html#load_adjacencylist"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.graph.load_adjacencylist" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="framework.graph.load_edgelist">
+<code class="descclassname">framework.graph.</code><code class="descname">load_edgelist</code><span class="sig-paren">(</span><em>file_</em>, <em>undirected=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/framework/graph.html#load_edgelist"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.graph.load_edgelist" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="framework.graph.load_matfile">
+<code class="descclassname">framework.graph.</code><code class="descname">load_matfile</code><span class="sig-paren">(</span><em>file_</em>, <em>variable_name='network'</em>, <em>undirected=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/framework/graph.html#load_matfile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.graph.load_matfile" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="framework.graph.parse_adjacencylist">
+<code class="descclassname">framework.graph.</code><code class="descname">parse_adjacencylist</code><span class="sig-paren">(</span><em>f</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/framework/graph.html#parse_adjacencylist"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.graph.parse_adjacencylist" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="framework.graph.parse_adjacencylist_unchecked">
+<code class="descclassname">framework.graph.</code><code class="descname">parse_adjacencylist_unchecked</code><span class="sig-paren">(</span><em>f</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/framework/graph.html#parse_adjacencylist_unchecked"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.graph.parse_adjacencylist_unchecked" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-framework.imports">
+<span id="framework-imports-module"></span><h2>framework.imports module<a class="headerlink" href="#module-framework.imports" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-framework.load_email_eu">
+<span id="framework-load-email-eu-module"></span><h2>framework.load_email_eu module<a class="headerlink" href="#module-framework.load_email_eu" title="Permalink to this headline">¶</a></h2>
+<p>Created on: 2018-12-24
+License: BSD 3 clause</p>
+<p>Copyright (C) 2018
+Author: Wei Cheng &lt;<a class="reference external" href="mailto:weicheng&#37;&#52;&#48;nec-labs&#46;com">weicheng<span>&#64;</span>nec-labs<span>&#46;</span>com</a>&gt;
+Affiliation: NEC Labs America</p>
+<dl class="function">
+<dt id="framework.load_email_eu.ismember">
+<code class="descclassname">framework.load_email_eu.</code><code class="descname">ismember</code><span class="sig-paren">(</span><em>a</em>, <em>b_vec</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/framework/load_email_eu.html#ismember"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.load_email_eu.ismember" title="Permalink to this definition">¶</a></dt>
+<dd><p>MATLAB equivalent ismember function</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="framework.load_email_eu.load_email_eu">
+<code class="descclassname">framework.load_email_eu.</code><code class="descname">load_email_eu</code><span class="sig-paren">(</span><em>data_path</em>, <em>sample_rate</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/framework/load_email_eu.html#load_email_eu"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.load_email_eu.load_email_eu" title="Permalink to this definition">¶</a></dt>
+<dd><p>function load_uci_message
+#  [data, n, m] = load_uci_message(sample_rate)
+#  load data set uci_message and preprocess it
+#  parameter: sample_rate to subsample edges
+#  return data: network(each row is one edge); n: number of total nodes; m:
+#  number of edges
+#  Example:
+#      input orginal file format as following: (nodeID, nodeID)
+#        1 2
+#        3 4
+#        5 2
+#        9 14
+#      output: data, n, m
+#          data is with format (nodeID, nodeID), each row is one edge
+#          n: number of total nodes; m: number of edges
+#   Copyright 2018 NEC Labs America, Inc.
+#   $Revision: 1.0 $  $Date: 2018/10/26 17:46:36 $</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-framework.netwalk_update">
+<span id="framework-netwalk-update-module"></span><h2>framework.netwalk_update module<a class="headerlink" href="#module-framework.netwalk_update" title="Permalink to this headline">¶</a></h2>
+<p>Created on: 2018-12-24
+License: BSD 3 clause</p>
+<p>Copyright (C) 2018
+Author: Wenchao Yu &lt;<a class="reference external" href="mailto:yuwenchao&#37;&#52;&#48;ucla&#46;edu">yuwenchao<span>&#64;</span>ucla<span>&#46;</span>edu</a>&gt;
+Affiliation: NEC Labs America</p>
+<dl class="class">
+<dt id="framework.netwalk_update.NetWalk_update">
+<em class="property">class </em><code class="descclassname">framework.netwalk_update.</code><code class="descname">NetWalk_update</code><span class="sig-paren">(</span><em>path</em>, <em>walk_per_node=5</em>, <em>walk_len=3</em>, <em>init_percent=0.5</em>, <em>snap=10</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/framework/netwalk_update.html#NetWalk_update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.netwalk_update.NetWalk_update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Preparing both training initial graph walks and testing list of walks in each snapshot</p>
+<dl class="method">
+<dt id="framework.netwalk_update.NetWalk_update.getInitWalk">
+<code class="descname">getInitWalk</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/framework/netwalk_update.html#NetWalk_update.getInitWalk"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.netwalk_update.NetWalk_update.getInitWalk" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get inital walk list
+:return: list of walks for initial training</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="framework.netwalk_update.NetWalk_update.getNumsnapshots">
+<code class="descname">getNumsnapshots</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/framework/netwalk_update.html#NetWalk_update.getNumsnapshots"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.netwalk_update.NetWalk_update.getNumsnapshots" title="Permalink to this definition">¶</a></dt>
+<dd><p>get number of total time snapshots
+:return: The number of total time snapshots</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="framework.netwalk_update.NetWalk_update.getOnehot">
+<code class="descname">getOnehot</code><span class="sig-paren">(</span><em>walks</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/framework/netwalk_update.html#NetWalk_update.getOnehot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.netwalk_update.NetWalk_update.getOnehot" title="Permalink to this definition">¶</a></dt>
+<dd><p>transform walks with id number to one-hot walk list
+:param walks: walk list
+:return: one-hot walk list</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="framework.netwalk_update.NetWalk_update.hasNext">
+<code class="descname">hasNext</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/framework/netwalk_update.html#NetWalk_update.hasNext"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.netwalk_update.NetWalk_update.hasNext" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checking if still has next snapshot
+:return: true if has, or return false</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="framework.netwalk_update.NetWalk_update.nextOnehotWalks">
+<code class="descname">nextOnehotWalks</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/framework/netwalk_update.html#NetWalk_update.nextOnehotWalks"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.netwalk_update.NetWalk_update.nextOnehotWalks" title="Permalink to this definition">¶</a></dt>
+<dd><p>get next list of walks for re-training in next time snapshot
+:return: next list of walks for re-training in next time snapshot</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="framework.netwalk_update.NetWalk_update.run">
+<code class="descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/framework/netwalk_update.html#NetWalk_update.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.netwalk_update.NetWalk_update.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>perform netwalk program with input data
+:return:</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="framework.netwalk_update.Reservior">
+<em class="property">class </em><code class="descclassname">framework.netwalk_update.</code><code class="descname">Reservior</code><span class="sig-paren">(</span><em>edges</em>, <em>vertices</em>, <em>dim=10</em>, <em>seed=24</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/framework/netwalk_update.html#Reservior"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.netwalk_update.Reservior" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>class maintains a sketch of the dynamic graph</p>
+<dl class="method">
+<dt id="framework.netwalk_update.Reservior.update">
+<code class="descname">update</code><span class="sig-paren">(</span><em>edges</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/framework/netwalk_update.html#Reservior.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.netwalk_update.Reservior.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>update the reservior based on the incoming edge(s)
+:param edges: new incoming edges
+:return:</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="framework.netwalk_update.WalkUpdate">
+<em class="property">class </em><code class="descclassname">framework.netwalk_update.</code><code class="descname">WalkUpdate</code><span class="sig-paren">(</span><em>init_edges</em>, <em>vertices</em>, <em>walk_len=3</em>, <em>walk_per_node=5</em>, <em>prev_percent=1</em>, <em>seed=24</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/framework/netwalk_update.html#WalkUpdate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.netwalk_update.WalkUpdate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>WalkUpdate update the Reservior and generate new batch of walks.</p>
+<dl class="method">
+<dt id="framework.netwalk_update.WalkUpdate.update">
+<code class="descname">update</code><span class="sig-paren">(</span><em>new_edges</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/framework/netwalk_update.html#WalkUpdate.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.netwalk_update.WalkUpdate.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updating reservior and generate new set of walks for re-training using newly come edges
+:param new_edges: newly arrived edges
+:return: new set of training walks</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="framework-util-module">
+<h2>framework.util module<a class="headerlink" href="#framework-util-module" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="framework-walks-module">
+<h2>framework.walks module<a class="headerlink" href="#framework-walks-module" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-framework">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-framework" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Wei Cheng(NEC Labs America) &amp; Wenchao Yu(UCLA)
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

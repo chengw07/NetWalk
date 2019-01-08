@@ -1,0 +1,383 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="english" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="english" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>NetWalk &mdash; NetWalk  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> NetWalk
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NetWalk</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">Module code</a> &raquo;</li>
+        
+      <li>NetWalk</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for NetWalk</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Created on: 2018-12-24</span>
+<span class="sd">    License: BSD 3 clause</span>
+
+<span class="sd">    Copyright (C) 2018</span>
+<span class="sd">    Author: Wei Cheng &lt;weicheng@nec-labs.com&gt; &amp; Wenchao Yu</span>
+<span class="sd">    Affiliation: NEC Labs America</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">argparse</span> <span class="k">import</span> <span class="n">ArgumentParser</span><span class="p">,</span> <span class="n">ArgumentDefaultsHelpFormatter</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="kn">from</span> <span class="nn">framework.imports</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">framework.Model</span> <span class="k">as</span> <span class="nn">MD</span>
+
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="k">import</span> <span class="n">datetime</span>
+<span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="nn">tf</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">networkx</span> <span class="k">as</span> <span class="nn">nx</span>
+
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">from</span> <span class="nn">plots.viz_stream</span> <span class="k">import</span> <span class="n">viz_stream</span>
+
+<span class="kn">from</span> <span class="nn">framework.netwalk_update</span> <span class="k">import</span> <span class="n">NetWalk_update</span>
+
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+<span class="n">LOGFORMAT</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%(asctime).19s</span><span class="s2"> </span><span class="si">%(levelname)s</span><span class="s2"> </span><span class="si">%(filename)s</span><span class="s2">: </span><span class="si">%(lineno)s</span><span class="s2"> </span><span class="si">%(message)s</span><span class="s2">&quot;</span>
+
+
+<div class="viewcode-block" id="print_time"><a class="viewcode-back" href="../NetWalk.html#NetWalk.print_time">[docs]</a><span class="k">def</span> <span class="nf">print_time</span><span class="p">():</span>
+    <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;[INFO %Y-%m-</span><span class="si">%d</span><span class="s1"> %H:%M:%S]&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="static_process"><a class="viewcode-back" href="../NetWalk.html#NetWalk.static_process">[docs]</a><span class="k">def</span> <span class="nf">static_process</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+
+
+    <span class="c1"># STEP 0: Parameters</span>
+    <span class="n">hidden_size</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">representation_size</span>     <span class="c1"># size of hidden codes to learn, default is 20</span>
+
+    <span class="n">activation</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">sigmoid</span>
+
+    <span class="n">rho</span> <span class="o">=</span> <span class="mf">0.5</span>           <span class="c1"># sparsity ratio</span>
+    <span class="n">lamb</span> <span class="o">=</span> <span class="mf">0.0017</span>       <span class="c1"># weight decay</span>
+    <span class="n">beta</span> <span class="o">=</span> <span class="mi">1</span>            <span class="c1"># sparsity weight</span>
+    <span class="n">gama</span> <span class="o">=</span> <span class="mi">340</span>          <span class="c1"># autoencoder weight</span>
+    <span class="n">walk_len</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">walk_length</span>
+    <span class="n">epoch</span> <span class="o">=</span> <span class="mi">400</span>
+    <span class="n">batch_size</span> <span class="o">=</span> <span class="mi">20</span>     <span class="c1"># number of epoch for optimizing, could be larger</span>
+    <span class="n">learning_rate</span> <span class="o">=</span> <span class="mf">0.1</span> <span class="c1"># learning rate, for adam, using 0.01, for rmsprop using 0.1</span>
+    <span class="n">optimizer</span> <span class="o">=</span> <span class="s2">&quot;rmsprop&quot;</span><span class="c1">#&quot;gd&quot;#&quot;rmsprop&quot; #&quot;&quot;lbfgs&quot;#&quot;rmsprop&quot;#&quot;adam&quot;#&quot;gd&quot;#&quot;&quot;lbfgs&quot;#&quot;adam&quot;#</span>
+    <span class="n">corrupt_prob</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># corrupt probability, for denoising AE</span>
+
+    <span class="c1"># STEP 1: Preparing data: training data and testing list of edges(for online updating)</span>
+    <span class="n">data_path</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">input</span>
+    <span class="n">netwalk</span> <span class="o">=</span> <span class="n">NetWalk_update</span><span class="p">(</span><span class="n">data_path</span><span class="p">,</span> <span class="n">walk_per_node</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">number_walks</span><span class="p">,</span> \
+                             <span class="n">walk_len</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">walk_length</span><span class="p">,</span> <span class="n">init_percent</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">init_percent</span><span class="p">,</span> <span class="n">snap</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">snap</span><span class="p">)</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">netwalk</span><span class="o">.</span><span class="n">vertices</span><span class="p">)</span> <span class="c1"># number of total nodes</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> Number of nodes: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">print_time</span><span class="p">(),</span> <span class="n">n</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> Number of walks: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">print_time</span><span class="p">(),</span> <span class="n">args</span><span class="o">.</span><span class="n">number_walks</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> Data size (walks*length): </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">print_time</span><span class="p">(),</span> <span class="n">args</span><span class="o">.</span><span class="n">number_walks</span><span class="o">*</span><span class="n">args</span><span class="o">.</span><span class="n">walk_length</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> Generating network walks...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">print_time</span><span class="p">()))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> Clique embedding training...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">print_time</span><span class="p">()))</span>
+
+    <span class="n">dimension</span> <span class="o">=</span> <span class="p">[</span><span class="n">n</span><span class="p">,</span> <span class="n">hidden_size</span><span class="p">]</span>
+
+    <span class="n">embModel</span> <span class="o">=</span> <span class="n">MD</span><span class="o">.</span><span class="n">Model</span><span class="p">(</span><span class="n">activation</span><span class="p">,</span> <span class="n">dimension</span><span class="p">,</span> <span class="n">walk_len</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">gama</span><span class="p">,</span> <span class="n">lamb</span><span class="p">,</span> <span class="n">beta</span><span class="p">,</span> <span class="n">rho</span><span class="p">,</span>
+                        <span class="n">epoch</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">,</span> <span class="n">learning_rate</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">,</span> <span class="n">corrupt_prob</span><span class="p">)</span>
+
+
+    <span class="n">init_edges</span><span class="p">,</span> <span class="n">snapshots</span> <span class="o">=</span> <span class="n">netwalk</span><span class="o">.</span><span class="n">data</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">netwalk</span><span class="o">.</span><span class="n">getInitWalk</span><span class="p">()</span>
+
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">12</span><span class="p">))</span>
+
+
+
+    <span class="c1"># STEP 2: Learning initial embeddings for training edges</span>
+    <span class="n">embedding_code</span><span class="p">(</span><span class="n">embModel</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span>
+
+    <span class="c1"># load karate club graph</span>
+    <span class="n">G</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">karate_club_graph</span><span class="p">()</span>
+    <span class="n">edge_list</span> <span class="o">=</span> <span class="n">G</span><span class="o">.</span><span class="n">edges</span><span class="p">()</span>
+
+    <span class="c1"># list of initial edge list tuples</span>
+    <span class="n">tuples</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">tuple</span><span class="p">,</span> <span class="n">init_edges</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
+
+    <span class="c1"># complementary set of edges for initial edges</span>
+    <span class="n">rm_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">edge_list</span> <span class="k">if</span> <span class="n">x</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">tuples</span><span class="p">]</span>
+
+    <span class="c1"># visualize initial embedding</span>
+    <span class="n">viz_stream</span><span class="p">(</span><span class="n">rm_list</span><span class="p">,</span> <span class="n">fig</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># STEP 3: over different snapshots of edges, dynamically updating embeddings of nodes and conduct</span>
+    <span class="c1">#         online anomaly detection for edges, visualize the anomaly score of each snapshot</span>
+    <span class="n">snapshotNum</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">while</span><span class="p">(</span><span class="n">netwalk</span><span class="o">.</span><span class="n">hasNext</span><span class="p">()):</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">netwalk</span><span class="o">.</span><span class="n">nextOnehotWalks</span><span class="p">()</span>
+        <span class="n">tuples</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">tuple</span><span class="p">,</span> <span class="n">snapshots</span><span class="p">[</span><span class="n">snapshotNum</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span> <span class="o">+</span> <span class="n">tuples</span>
+        <span class="n">snapshotNum</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">embedding_code</span><span class="p">(</span><span class="n">embModel</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span>
+        <span class="n">rm_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">edge_list</span> <span class="k">if</span> <span class="n">x</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">tuples</span><span class="p">]</span>
+        <span class="n">viz_stream</span><span class="p">(</span><span class="n">rm_list</span><span class="p">,</span> <span class="n">fig</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">snapshotNum</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;finished&quot;</span><span class="p">)</span></div>
+
+
+
+
+
+<div class="viewcode-block" id="embedding_code"><a class="viewcode-back" href="../NetWalk.html#NetWalk.embedding_code">[docs]</a><span class="k">def</span> <span class="nf">embedding_code</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            function embedding_code(model, data, n, args)</span>
+<span class="sd">            #  the function feed &#39;&#39;data&#39;&#39; which is a list of walks</span>
+<span class="sd">            #  the embedding &#39;&#39;model&#39;&#39;, n: the number of total nodes</span>
+<span class="sd">            return: the embeddings of all nodes, each row is one node, each column is one dimension of embedding</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+    <span class="c1"># STEP 2:  optimizing to fit parameter learning</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+    <span class="c1"># STEP 3: retrieve the embeddings</span>
+    <span class="n">node_onehot</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">feedforward_autoencoder</span><span class="p">(</span><span class="n">node_onehot</span><span class="p">)</span>
+
+    <span class="n">ids</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">)))</span>
+
+    <span class="n">ids</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">ids</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">embeddings</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">ids</span><span class="p">,</span> <span class="n">res</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># STEP 4: save results</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">savetxt</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">output</span><span class="p">,</span> <span class="n">embeddings</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">%g</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> Done! Embeddings are saved in </span><span class="se">\&quot;</span><span class="si">{}</span><span class="se">\&quot;</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">print_time</span><span class="p">(),</span> <span class="n">args</span><span class="o">.</span><span class="n">output</span><span class="p">))</span></div>
+    <span class="c1"># print embeddings</span>
+
+
+<div class="viewcode-block" id="main"><a class="viewcode-back" href="../NetWalk.html#NetWalk.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">ArgumentParser</span><span class="p">(</span><span class="s2">&quot;NETWALK&quot;</span><span class="p">,</span> <span class="n">formatter_class</span><span class="o">=</span><span class="n">ArgumentDefaultsHelpFormatter</span><span class="p">,</span> <span class="n">conflict_handler</span><span class="o">=</span><span class="s1">&#39;resolve&#39;</span><span class="p">)</span>
+
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--format&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s1">&#39;adjlist&#39;</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s1">&#39;File format of input file&#39;</span><span class="p">)</span>
+
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--snap&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s1">&#39;number of edges in each snapshot&#39;</span><span class="p">)</span>
+
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--init_percent&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s1">&#39;percentage of edges in initial graph&#39;</span><span class="p">)</span>
+
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--input&#39;</span><span class="p">,</span> <span class="n">nargs</span><span class="o">=</span><span class="s1">&#39;?&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s1">&#39;../data/karate.edges&#39;</span><span class="p">,</span>  <span class="c1"># required=True,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Input graph file&#39;</span><span class="p">)</span>
+
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;-l&quot;</span><span class="p">,</span> <span class="s2">&quot;--log&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;log&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">&quot;INFO&quot;</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;log verbosity level&quot;</span><span class="p">)</span>
+
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--matfile-variable-name&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s1">&#39;network&#39;</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s1">&#39;variable name of adjacency matrix inside a .mat file.&#39;</span><span class="p">)</span>
+
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--number_walks&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Number of random walks to start at each node&#39;</span><span class="p">)</span>
+
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--output&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s1">&#39;./tmp/embedding.txt&#39;</span><span class="p">,</span>  <span class="c1"># required=True,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Output representation file&#39;</span><span class="p">)</span>
+
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--representation-size&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Number of latent dimensions to learn for each node.&#39;</span><span class="p">)</span>
+
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--seed&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">24</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Seed for random walk generator.&#39;</span><span class="p">)</span>
+
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--undirected&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">bool</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Treat graph as undirected.&#39;</span><span class="p">)</span>
+
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--walk-length&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Length of the random walk started at each node&#39;</span><span class="p">)</span>
+
+    <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+    <span class="n">numeric_level</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">logging</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">upper</span><span class="p">(),</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="nb">format</span><span class="o">=</span><span class="n">LOGFORMAT</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">numeric_level</span><span class="p">)</span>
+
+    <span class="n">static_process</span><span class="p">(</span><span class="n">args</span><span class="p">)</span></div>
+
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Wei Cheng(NEC Labs America) &amp; Wenchao Yu(UCLA)
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

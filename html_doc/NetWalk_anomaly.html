@@ -1,0 +1,229 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="english" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="english" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>NetWalk_anomaly module &mdash; NetWalk  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> NetWalk
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">NetWalk_anomaly module</a></li>
+</ul>
+</div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">NetWalk</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>NetWalk_anomaly module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/NetWalk_anomaly.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-NetWalk_anomaly">
+<span id="netwalk-anomaly-module"></span><h1>NetWalk_anomaly module<a class="headerlink" href="#module-NetWalk_anomaly" title="Permalink to this headline">¶</a></h1>
+<p>Created on: 2018-12-24
+License: BSD 3 clause</p>
+<p>Copyright (C) 2018
+Author: Wei Cheng &lt;<a class="reference external" href="mailto:weicheng&#37;&#52;&#48;nec-labs&#46;com">weicheng<span>&#64;</span>nec-labs<span>&#46;</span>com</a>&gt; &amp; Wenchao Yu
+Affiliation: NEC Labs America</p>
+<dl class="function">
+<dt id="NetWalk_anomaly.getEmbedding">
+<code class="descclassname">NetWalk_anomaly.</code><code class="descname">getEmbedding</code><span class="sig-paren">(</span><em>model</em>, <em>data</em>, <em>n</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NetWalk_anomaly.html#getEmbedding"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NetWalk_anomaly.getEmbedding" title="Permalink to this definition">¶</a></dt>
+<dd><p>function getEmbedding(model, data, n)
+#  the function feed ''data'' which is a list of walks
+#  the embedding ''model'', n: the number of total nodes
+return: the embeddings of all nodes, each row is one node, each column is one dimension of embedding</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="NetWalk_anomaly.main">
+<code class="descclassname">NetWalk_anomaly.</code><code class="descname">main</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/NetWalk_anomaly.html#main"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NetWalk_anomaly.main" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="NetWalk_anomaly.print_time">
+<code class="descclassname">NetWalk_anomaly.</code><code class="descname">print_time</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/NetWalk_anomaly.html#print_time"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NetWalk_anomaly.print_time" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="NetWalk_anomaly.static_process">
+<code class="descclassname">NetWalk_anomaly.</code><code class="descname">static_process</code><span class="sig-paren">(</span><em>args</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NetWalk_anomaly.html#static_process"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NetWalk_anomaly.static_process" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Wei Cheng(NEC Labs America) &amp; Wenchao Yu(UCLA)
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

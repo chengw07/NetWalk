@@ -1,0 +1,287 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="english" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="english" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>plots package &mdash; NetWalk  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> NetWalk
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">plots package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-plots.DynamicUpdate">plots.DynamicUpdate module</a></li>
+<li><a class="reference internal" href="#module-plots.viz_karate">plots.viz_karate module</a></li>
+<li><a class="reference internal" href="#module-plots.viz_stream">plots.viz_stream module</a></li>
+<li><a class="reference internal" href="#module-plots">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">NetWalk</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>plots package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/plots.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="plots-package">
+<h1>plots package<a class="headerlink" href="#plots-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-plots.DynamicUpdate">
+<span id="plots-dynamicupdate-module"></span><h2>plots.DynamicUpdate module<a class="headerlink" href="#module-plots.DynamicUpdate" title="Permalink to this headline">¶</a></h2>
+<p>Created on: 2018-12-24
+License: BSD 3 clause</p>
+<p>Copyright (C) 2018
+Author: Wei Cheng &lt;<a class="reference external" href="mailto:weicheng&#37;&#52;&#48;nec-labs&#46;com">weicheng<span>&#64;</span>nec-labs<span>&#46;</span>com</a>&gt;
+Affiliation: NEC Labs America</p>
+<dl class="class">
+<dt id="plots.DynamicUpdate.DynamicUpdate">
+<em class="property">class </em><code class="descclassname">plots.DynamicUpdate.</code><code class="descname">DynamicUpdate</code><a class="reference internal" href="_modules/plots/DynamicUpdate.html#DynamicUpdate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plots.DynamicUpdate.DynamicUpdate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="method">
+<dt id="plots.DynamicUpdate.DynamicUpdate.addPoint">
+<code class="descname">addPoint</code><span class="sig-paren">(</span><em>x</em>, <em>y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/plots/DynamicUpdate.html#DynamicUpdate.addPoint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plots.DynamicUpdate.DynamicUpdate.addPoint" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="plots.DynamicUpdate.DynamicUpdate.max_x">
+<code class="descname">max_x</code><em class="property"> = 4</em><a class="headerlink" href="#plots.DynamicUpdate.DynamicUpdate.max_x" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="plots.DynamicUpdate.DynamicUpdate.min_x">
+<code class="descname">min_x</code><em class="property"> = -1</em><a class="headerlink" href="#plots.DynamicUpdate.DynamicUpdate.min_x" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="plots.DynamicUpdate.DynamicUpdate.on_launch">
+<code class="descname">on_launch</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/plots/DynamicUpdate.html#DynamicUpdate.on_launch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plots.DynamicUpdate.DynamicUpdate.on_launch" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="plots.DynamicUpdate.DynamicUpdate.on_running">
+<code class="descname">on_running</code><span class="sig-paren">(</span><em>xdata</em>, <em>ydata</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/plots/DynamicUpdate.html#DynamicUpdate.on_running"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plots.DynamicUpdate.DynamicUpdate.on_running" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-plots.viz_karate">
+<span id="plots-viz-karate-module"></span><h2>plots.viz_karate module<a class="headerlink" href="#module-plots.viz_karate" title="Permalink to this headline">¶</a></h2>
+<p>Created on: 2018-12-24
+License: BSD 3 clause</p>
+<p>Copyright (C) 2018
+Author: Wei Cheng &lt;<a class="reference external" href="mailto:weicheng&#37;&#52;&#48;nec-labs&#46;com">weicheng<span>&#64;</span>nec-labs<span>&#46;</span>com</a>&gt;
+Affiliation: NEC Labs America</p>
+<dl class="function">
+<dt id="plots.viz_karate.viz">
+<code class="descclassname">plots.viz_karate.</code><code class="descname">viz</code><span class="sig-paren">(</span><em>membership_path='./tmp/membership.txt'</em>, <em>embedding_path='./tmp/embedding.txt'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/plots/viz_karate.html#viz"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plots.viz_karate.viz" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-plots.viz_stream">
+<span id="plots-viz-stream-module"></span><h2>plots.viz_stream module<a class="headerlink" href="#module-plots.viz_stream" title="Permalink to this headline">¶</a></h2>
+<p>Created on: 2018-12-24
+License: BSD 3 clause</p>
+<p>Copyright (C) 2018
+Author: Wei Cheng &lt;<a class="reference external" href="mailto:weicheng&#37;&#52;&#48;nec-labs&#46;com">weicheng<span>&#64;</span>nec-labs<span>&#46;</span>com</a>&gt;
+Affiliation: NEC Labs America</p>
+<dl class="function">
+<dt id="plots.viz_stream.viz_stream">
+<code class="descclassname">plots.viz_stream.</code><code class="descname">viz_stream</code><span class="sig-paren">(</span><em>rm_edges</em>, <em>fig</em>, <em>row</em>, <em>col</em>, <em>id</em>, <em>membership_path='./tmp/membership.txt'</em>, <em>embedding_path='./tmp/embedding.txt'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/plots/viz_stream.html#viz_stream"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plots.viz_stream.viz_stream" title="Permalink to this definition">¶</a></dt>
+<dd><p>Visualizing karate graph for dynamical graph embedding demo
+:param rm_edges: removed edges
+:param fig: figure
+:param row: subplot row number
+:param col: subplot col number
+:param id: subplot id
+:param membership_path: node class in karate graph
+:param embedding_path: node embedding results
+:return: no return</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-plots">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-plots" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Wei Cheng(NEC Labs America) &amp; Wenchao Yu(UCLA)
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

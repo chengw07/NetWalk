@@ -1,0 +1,382 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="english" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="english" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>framework.Model &mdash; NetWalk  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> NetWalk
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">NetWalk</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>framework.Model</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for framework.Model</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Created on: 2018-12-24</span>
+<span class="sd">    License: BSD 3 clause</span>
+
+<span class="sd">    Copyright (C) 2018</span>
+<span class="sd">    Author: Wei Cheng &lt;weicheng@nec-labs.com&gt;</span>
+<span class="sd">    Affiliation: NEC Labs America</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">scipy.sparse</span> <span class="k">import</span> <span class="n">csgraph</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">framework</span> <span class="k">import</span> <span class="n">DenoisingAE</span>
+<span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="nn">tf</span>
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">from</span> <span class="nn">tqdm</span> <span class="k">import</span> <span class="n">tqdm</span>
+
+<div class="viewcode-block" id="Model"><a class="viewcode-back" href="../../framework.html#framework.Model.Model">[docs]</a><span class="k">class</span> <span class="nc">Model</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">activation</span><span class="p">,</span> <span class="n">dimension</span><span class="p">,</span> <span class="n">walk_len</span><span class="p">,</span> <span class="n">nodeNum</span><span class="p">,</span> <span class="n">gama</span><span class="p">,</span> <span class="n">lamb</span><span class="p">,</span>
+                 <span class="n">beta</span><span class="p">,</span> <span class="n">rho</span><span class="p">,</span> <span class="n">epoch</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">,</span> <span class="n">learning_rate</span><span class="p">,</span> <span class="n">optimizer_type</span><span class="p">,</span> <span class="n">corrupt_prob</span><span class="p">):</span>
+
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">activation</span> <span class="o">=</span> <span class="n">activation</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">corrupt_prob_value</span> <span class="o">=</span> <span class="n">corrupt_prob</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">activation</span> <span class="o">=</span> <span class="n">activation</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">optimized</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dimension</span> <span class="o">=</span> <span class="n">dimension</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">walk_len</span> <span class="o">=</span> <span class="n">walk_len</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gama</span> <span class="o">=</span> <span class="n">gama</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lamb</span> <span class="o">=</span> <span class="n">lamb</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">beta</span> <span class="o">=</span> <span class="n">beta</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rho</span> <span class="o">=</span> <span class="n">rho</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">epoch</span> <span class="o">=</span> <span class="n">epoch</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span> <span class="o">=</span> <span class="n">batch_size</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">walk_len</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">learning_rate</span> <span class="o">=</span> <span class="n">learning_rate</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodeNum</span> <span class="o">=</span> <span class="n">nodeNum</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">optimizer_type</span> <span class="o">=</span> <span class="n">optimizer_type</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">placeholder</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">int32</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">nodeNum</span><span class="p">,</span> <span class="kc">None</span><span class="p">],</span><span class="c1">#self.batch_size], #</span>
+                                   <span class="n">name</span><span class="o">=</span><span class="s1">&#39;data&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">corrupt_prob</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">placeholder</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">loss</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">clique_loss</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ae_loss</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">kl_loss</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">self_weight_decay_J</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">clique_embedding_loss</span><span class="p">()</span>
+
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">optimizer_type</span> <span class="o">==</span> <span class="s2">&quot;adam&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">train</span><span class="o">.</span><span class="n">AdamOptimizer</span><span class="p">(</span><span class="n">learning_rate</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">learning_rate</span><span class="p">,</span> <span class="n">beta1</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span> <span class="n">beta2</span><span class="o">=</span><span class="mf">0.999</span><span class="p">,</span>
+                                                    <span class="n">epsilon</span><span class="o">=</span><span class="mf">1e-8</span><span class="p">)</span><span class="o">.</span><span class="n">minimize</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">loss</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">optimizer_type</span> <span class="o">==</span> <span class="s2">&quot;adagrad&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">train</span><span class="o">.</span><span class="n">AdagradOptimizer</span><span class="p">(</span><span class="n">learning_rate</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">learning_rate</span><span class="p">,</span>
+                                                       <span class="n">initial_accumulator_value</span><span class="o">=</span><span class="mf">1e-8</span><span class="p">)</span><span class="o">.</span><span class="n">minimize</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">loss</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">optimizer_type</span> <span class="o">==</span> <span class="s2">&quot;gd&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">train</span><span class="o">.</span><span class="n">GradientDescentOptimizer</span><span class="p">(</span><span class="n">learning_rate</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">learning_rate</span><span class="p">)</span><span class="o">.</span><span class="n">minimize</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">loss</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">optimizer_type</span> <span class="o">==</span> <span class="s2">&quot;rmsprop&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">train</span><span class="o">.</span><span class="n">RMSPropOptimizer</span><span class="p">(</span><span class="n">learning_rate</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">learning_rate</span><span class="p">)</span><span class="o">.</span><span class="n">minimize</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">loss</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">optimizer_type</span> <span class="o">==</span> <span class="s2">&quot;momentum&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">train</span><span class="o">.</span><span class="n">MomentumOptimizer</span><span class="p">(</span><span class="n">learning_rate</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">learning_rate</span><span class="p">,</span> <span class="n">momentum</span><span class="o">=</span><span class="mf">0.95</span><span class="p">)</span><span class="o">.</span><span class="n">minimize</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">loss</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">contrib</span><span class="o">.</span><span class="n">opt</span><span class="o">.</span><span class="n">ScipyOptimizerInterface</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">loss</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;L-BFGS-B&quot;</span><span class="p">,</span>
+                                                               <span class="n">options</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;maxiter&#39;</span><span class="p">:</span> <span class="mi">200</span><span class="p">,</span> <span class="s1">&#39;disp&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">})</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">init</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">global_variables_initializer</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sess</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">Session</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">init</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">saver</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">train</span><span class="o">.</span><span class="n">Saver</span><span class="p">()</span>
+
+<div class="viewcode-block" id="Model.feedforward_autoencoder"><a class="viewcode-back" href="../../framework.html#framework.Model.Model.feedforward_autoencoder">[docs]</a>    <span class="k">def</span> <span class="nf">feedforward_autoencoder</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">optimized</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Need training first!&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="n">current_input</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>  <span class="c1"># ((scipy.sparse.coo_matrix)(data)).todense().astype(np.float32)</span>
+
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">sess</span><span class="o">.</span><span class="n">as_default</span><span class="p">():</span>
+            <span class="n">code</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">encoder_out</span><span class="p">)</span>
+            <span class="n">res</span> <span class="o">=</span> <span class="n">code</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">feed_dict</span><span class="o">=</span><span class="p">{</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">:</span> <span class="n">current_input</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">corrupt_prob</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">corrupt_prob_value</span><span class="p">})</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+        <span class="c1"># for i in range(len(self.b_list_value)):</span>
+        <span class="c1">#     W = self.W_list_value[i]</span>
+        <span class="c1">#     b = self.b_list_value[i]</span>
+        <span class="c1">#     output = self.sigmoid(np.transpose(np.matmul(W, current_input)) + b)</span>
+        <span class="c1">#     current_input = output</span>
+        <span class="k">return</span> <span class="n">current_input</span></div>
+
+<div class="viewcode-block" id="Model.sigmoid"><a class="viewcode-back" href="../../framework.html#framework.Model.Model.sigmoid">[docs]</a>    <span class="k">def</span> <span class="nf">sigmoid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">derivative</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="n">sigm</span> <span class="o">=</span> <span class="mf">1.</span> <span class="o">/</span> <span class="p">(</span><span class="mf">1.</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">derivative</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">sigm</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1.</span> <span class="o">-</span> <span class="n">sigm</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">sigm</span></div>
+
+<div class="viewcode-block" id="Model.clique_embedding_loss"><a class="viewcode-back" href="../../framework.html#framework.Model.Model.clique_embedding_loss">[docs]</a>    <span class="k">def</span> <span class="nf">clique_embedding_loss</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="n">DenoisingAE</span><span class="o">.</span><span class="n">autoencoder</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">corrupt_prob</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dimension</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">beta</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rho</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">activation</span><span class="p">,</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">lamb</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gama</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">encoder_out</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="s1">&#39;encoder_out&#39;</span><span class="p">]</span>
+
+        <span class="n">ae_cost</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="s1">&#39;cost&#39;</span><span class="p">]</span>
+
+        <span class="n">phi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">walk_len</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">walk_len</span><span class="p">))</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">walk_len</span><span class="p">)</span>
+        <span class="n">L</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">csgraph</span><span class="o">.</span><span class="n">laplacian</span><span class="p">(</span><span class="n">phi</span><span class="p">,</span> <span class="n">normed</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span> <span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+
+
+        <span class="n">trans_code</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">encoder_out</span><span class="p">)</span>
+        <span class="n">trans_code</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">trans_code</span><span class="p">,</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">walk_len</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dimension</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]])</span>
+        <span class="n">t_trans_code</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">trans_code</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+
+        <span class="n">left</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">&#39;aij,jk-&gt;aik&#39;</span><span class="p">,</span> <span class="n">t_trans_code</span><span class="p">,</span> <span class="n">L</span><span class="p">)</span>
+
+        <span class="n">mul</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">&#39;aij,ajk-&gt;aik&#39;</span><span class="p">,</span> <span class="n">left</span><span class="p">,</span> <span class="n">trans_code</span><span class="p">)</span>
+        <span class="n">trace_mul</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">trace</span><span class="p">(</span><span class="n">mul</span><span class="p">)</span>
+        <span class="n">clique_J</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">reduce_mean</span><span class="p">(</span><span class="n">trace_mul</span><span class="p">)</span>
+
+
+        <span class="c1"># for i in range(num_walks):</span>
+        <span class="c1">#     f_i = self.encoder_out[:, i * self.walk_len:(i + 1) * self.walk_len]</span>
+        <span class="c1">#     clique_J += tf.reduce_mean(tf.linalg.diag_part(tf.matmul(tf.matmul(f_i, L), tf.transpose(f_i))))</span>
+        <span class="c1">#     #tf.trace(tf.matmul(tf.matmul(f_i, L), tf.transpose(f_i)))</span>
+
+        <span class="n">clique_loss</span> <span class="o">=</span> <span class="n">clique_J</span> <span class="c1">#(self.walk_len / m) *</span>
+        <span class="n">loss</span> <span class="o">=</span> <span class="n">clique_loss</span> <span class="o">+</span> <span class="n">ae_cost</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">optimized</span> <span class="o">=</span> <span class="kc">True</span>
+
+
+        <span class="c1"># self.W_list = result[&#39;W_list&#39;]</span>
+        <span class="c1"># self.b_list = result[&#39;b_list&#39;]</span>
+
+
+        <span class="k">return</span> <span class="n">loss</span><span class="p">,</span> <span class="n">clique_loss</span><span class="p">,</span> <span class="n">result</span><span class="p">[</span><span class="s1">&#39;ae_loss&#39;</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="s1">&#39;kl_loss&#39;</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="s1">&#39;weight_decay_J&#39;</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="Model.print_loss"><a class="viewcode-back" href="../../framework.html#framework.Model.Model.print_loss">[docs]</a>    <span class="k">def</span> <span class="nf">print_loss</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">loss_evaled</span><span class="p">,</span> <span class="n">cl</span><span class="p">,</span> <span class="n">ae</span><span class="p">,</span> <span class="n">kl</span><span class="p">,</span> <span class="n">weight_loss</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">loss_evaled</span><span class="p">,</span> <span class="s2">&quot; cl:&quot;</span><span class="p">,</span> <span class="n">cl</span><span class="p">,</span> <span class="s2">&quot; ae:&quot;</span><span class="p">,</span> <span class="n">ae</span><span class="p">,</span> <span class="s2">&quot; kl:&quot;</span><span class="p">,</span> <span class="n">kl</span><span class="p">,</span> <span class="s2">&quot; l2_regularizer:&quot;</span><span class="p">,</span> <span class="n">weight_loss</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Model.batchify"><a class="viewcode-back" href="../../framework.html#framework.Model.Model.batchify">[docs]</a>    <span class="k">def</span> <span class="nf">batchify</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">bsz</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :param data: training walks sets, that is a list of node walk chain, each chain is a list of nodes</span>
+<span class="sd">        :param bsz: batch size</span>
+<span class="sd">        :param shuffle: indicator of if reshuffle training set then split it to batches</span>
+<span class="sd">        :param gpu: if conduct in gpu</span>
+<span class="sd">        :return: batches of training samples(walks)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">shuffle</span><span class="p">:</span>
+            <span class="n">random</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">nbatch</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">//</span> <span class="n">bsz</span>
+        <span class="n">batches</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nbatch</span><span class="p">):</span>
+            <span class="c1"># Pad batches to maximum sequence length in batch</span>
+            <span class="n">batch</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span> <span class="n">i</span> <span class="o">*</span> <span class="n">bsz</span><span class="p">:(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">bsz</span><span class="p">]</span>
+            <span class="n">batches</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">batch</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">batches</span></div>
+
+<div class="viewcode-block" id="Model.fit"><a class="viewcode-back" href="../../framework.html#framework.Model.Model.fit">[docs]</a>    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_train</span><span class="p">):</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">sess</span><span class="o">.</span><span class="n">as_default</span><span class="p">():</span>
+            <span class="c1">#self.sess.run(self.init)  #default: warm-start</span>
+            <span class="n">epochs</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">epoch</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">epochs</span><span class="p">):</span>
+
+                <span class="n">batches</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">batchify</span><span class="p">(</span><span class="n">data_train</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span><span class="p">)</span>
+                <span class="n">bt_loss</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">optimizer_type</span> <span class="o">==</span> <span class="s2">&quot;lbfgs&quot;</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">batches</span><span class="p">)):</span>
+                        <span class="n">batch</span> <span class="o">=</span> <span class="n">batches</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                        <span class="n">feed_dict</span> <span class="o">=</span> <span class="p">{</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">:</span> <span class="n">batch</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">corrupt_prob</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">corrupt_prob_value</span><span class="p">}</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span><span class="o">.</span><span class="n">minimize</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sess</span><span class="p">,</span> <span class="n">loss_callback</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">print_loss</span><span class="p">,</span>
+                                            <span class="n">fetches</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">loss</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">clique_loss</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ae_loss</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">kl_loss</span><span class="p">,</span>
+                                                     <span class="bp">self</span><span class="o">.</span><span class="n">self_weight_decay_J</span><span class="p">],</span>
+                                            <span class="n">feed_dict</span><span class="o">=</span><span class="n">feed_dict</span><span class="p">)</span>
+
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">batches</span><span class="p">)):</span>
+                        <span class="n">batch</span> <span class="o">=</span> <span class="n">batches</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                        <span class="n">feed_dict</span> <span class="o">=</span> <span class="p">{</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">:</span> <span class="n">batch</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">corrupt_prob</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">corrupt_prob_value</span><span class="p">}</span>
+                        <span class="n">loss_bt</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sess</span><span class="o">.</span><span class="n">run</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">loss</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span><span class="p">],</span> <span class="n">feed_dict</span><span class="o">=</span><span class="n">feed_dict</span><span class="p">)</span>
+                        <span class="n">cl</span><span class="p">,</span> <span class="n">ae</span><span class="p">,</span> <span class="n">kl</span><span class="p">,</span> <span class="n">weight</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+                            <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">clique_loss</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ae_loss</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">kl_loss</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">self_weight_decay_J</span><span class="p">],</span>
+                            <span class="n">feed_dict</span><span class="o">=</span><span class="n">feed_dict</span><span class="p">)</span>
+
+                        <span class="c1">#print(&quot;cl_loss:%.10f, ae_loss:%.7f, kl_loss:%.20f, weight_l2_loss:%.7f&quot; % (cl, ae, kl, weight))</span>
+                        <span class="n">bt_loss</span> <span class="o">+=</span> <span class="n">loss_bt</span></div></div>
+                    <span class="c1">#print(&quot;epoch %d loss:%.4f&quot; % (epoch, bt_loss))</span>
+            <span class="c1"># self.W_list_value = []</span>
+            <span class="c1"># self.b_list_value = []</span>
+            <span class="c1"># for w in self.W_list:</span>
+            <span class="c1">#     self.W_list_value.append(w.eval())</span>
+            <span class="c1"># for b in self.b_list:</span>
+            <span class="c1">#     self.b_list_value.append(b.eval())</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Wei Cheng(NEC Labs America) &amp; Wenchao Yu(UCLA)
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

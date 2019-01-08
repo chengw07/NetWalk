@@ -1,0 +1,102 @@
+framework package
+=================
+
+Submodules
+----------
+
+framework.DenoisingAE module
+----------------------------
+
+.. automodule:: framework.DenoisingAE
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+framework.Model module
+----------------------
+
+.. automodule:: framework.Model
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+framework.anomaly\_detection module
+-----------------------------------
+
+.. automodule:: framework.anomaly_detection
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+framework.anomaly\_detection\_stream module
+-------------------------------------------
+
+.. automodule:: framework.anomaly_detection_stream
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+framework.anomaly\_generation module
+------------------------------------
+
+.. automodule:: framework.anomaly_generation
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+framework.graph module
+----------------------
+
+.. automodule:: framework.graph
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+framework.imports module
+------------------------
+
+.. automodule:: framework.imports
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+framework.load\_email\_eu module
+--------------------------------
+
+.. automodule:: framework.load_email_eu
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+framework.netwalk\_update module
+--------------------------------
+
+.. automodule:: framework.netwalk_update
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+framework.util module
+---------------------
+
+.. automodule:: framework.util
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+framework.walks module
+----------------------
+
+.. automodule:: framework.walks
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: framework
+    :members:
+    :undoc-members:
+    :show-inheritance:

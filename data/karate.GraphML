@@ -1,0 +1,388 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns
+         http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">
+<!-- Created by igraph -->
+  <key id="name" for="graph" attr.name="name" attr.type="string"/>
+  <key id="Citation" for="graph" attr.name="Citation" attr.type="string"/>
+  <key id="Author" for="graph" attr.name="Author" attr.type="string"/>
+  <key id="Faction" for="node" attr.name="Faction" attr.type="double"/>
+  <key id="name" for="node" attr.name="name" attr.type="string"/>
+  <key id="weight" for="edge" attr.name="weight" attr.type="double"/>
+  <graph id="G" edgedefault="undirected">
+    <data key="name">Zachary&apos;s karate club network</data>
+    <data key="Citation">Wayne W. Zachary. An Information Flow Model for Conflict and Fission in Small Groups. Journal of Anthropological Research Vol. 33, No. 4 452-473</data>
+    <data key="Author">Wayne W. Zachary</data>
+    <node id="n0">
+      <data key="Faction">1</data>
+      <data key="name">Mr Hi</data>
+    </node>
+    <node id="n1">
+      <data key="Faction">1</data>
+      <data key="name">Actor 2</data>
+    </node>
+    <node id="n2">
+      <data key="Faction">1</data>
+      <data key="name">Actor 3</data>
+    </node>
+    <node id="n3">
+      <data key="Faction">1</data>
+      <data key="name">Actor 4</data>
+    </node>
+    <node id="n4">
+      <data key="Faction">1</data>
+      <data key="name">Actor 5</data>
+    </node>
+    <node id="n5">
+      <data key="Faction">1</data>
+      <data key="name">Actor 6</data>
+    </node>
+    <node id="n6">
+      <data key="Faction">1</data>
+      <data key="name">Actor 7</data>
+    </node>
+    <node id="n7">
+      <data key="Faction">1</data>
+      <data key="name">Actor 8</data>
+    </node>
+    <node id="n8">
+      <data key="Faction">2</data>
+      <data key="name">Actor 9</data>
+    </node>
+    <node id="n9">
+      <data key="Faction">2</data>
+      <data key="name">Actor 10</data>
+    </node>
+    <node id="n10">
+      <data key="Faction">1</data>
+      <data key="name">Actor 11</data>
+    </node>
+    <node id="n11">
+      <data key="Faction">1</data>
+      <data key="name">Actor 12</data>
+    </node>
+    <node id="n12">
+      <data key="Faction">1</data>
+      <data key="name">Actor 13</data>
+    </node>
+    <node id="n13">
+      <data key="Faction">1</data>
+      <data key="name">Actor 14</data>
+    </node>
+    <node id="n14">
+      <data key="Faction">2</data>
+      <data key="name">Actor 15</data>
+    </node>
+    <node id="n15">
+      <data key="Faction">2</data>
+      <data key="name">Actor 16</data>
+    </node>
+    <node id="n16">
+      <data key="Faction">1</data>
+      <data key="name">Actor 17</data>
+    </node>
+    <node id="n17">
+      <data key="Faction">1</data>
+      <data key="name">Actor 18</data>
+    </node>
+    <node id="n18">
+      <data key="Faction">2</data>
+      <data key="name">Actor 19</data>
+    </node>
+    <node id="n19">
+      <data key="Faction">1</data>
+      <data key="name">Actor 20</data>
+    </node>
+    <node id="n20">
+      <data key="Faction">2</data>
+      <data key="name">Actor 21</data>
+    </node>
+    <node id="n21">
+      <data key="Faction">1</data>
+      <data key="name">Actor 22</data>
+    </node>
+    <node id="n22">
+      <data key="Faction">2</data>
+      <data key="name">Actor 23</data>
+    </node>
+    <node id="n23">
+      <data key="Faction">2</data>
+      <data key="name">Actor 24</data>
+    </node>
+    <node id="n24">
+      <data key="Faction">2</data>
+      <data key="name">Actor 25</data>
+    </node>
+    <node id="n25">
+      <data key="Faction">2</data>
+      <data key="name">Actor 26</data>
+    </node>
+    <node id="n26">
+      <data key="Faction">2</data>
+      <data key="name">Actor 27</data>
+    </node>
+    <node id="n27">
+      <data key="Faction">2</data>
+      <data key="name">Actor 28</data>
+    </node>
+    <node id="n28">
+      <data key="Faction">2</data>
+      <data key="name">Actor 29</data>
+    </node>
+    <node id="n29">
+      <data key="Faction">2</data>
+      <data key="name">Actor 30</data>
+    </node>
+    <node id="n30">
+      <data key="Faction">2</data>
+      <data key="name">Actor 31</data>
+    </node>
+    <node id="n31">
+      <data key="Faction">2</data>
+      <data key="name">Actor 32</data>
+    </node>
+    <node id="n32">
+      <data key="Faction">2</data>
+      <data key="name">Actor 33</data>
+    </node>
+    <node id="n33">
+      <data key="Faction">2</data>
+      <data key="name">John A</data>
+    </node>
+    <edge source="n0" target="n1">
+      <data key="weight">4</data>
+    </edge>
+    <edge source="n0" target="n2">
+      <data key="weight">5</data>
+    </edge>
+    <edge source="n0" target="n3">
+      <data key="weight">3</data>
+    </edge>
+    <edge source="n0" target="n4">
+      <data key="weight">3</data>
+    </edge>
+    <edge source="n0" target="n5">
+      <data key="weight">3</data>
+    </edge>
+    <edge source="n0" target="n6">
+      <data key="weight">3</data>
+    </edge>
+    <edge source="n0" target="n7">
+      <data key="weight">2</data>
+    </edge>
+    <edge source="n0" target="n8">
+      <data key="weight">2</data>
+    </edge>
+    <edge source="n0" target="n10">
+      <data key="weight">2</data>
+    </edge>
+    <edge source="n0" target="n11">
+      <data key="weight">3</data>
+    </edge>
+    <edge source="n0" target="n12">
+      <data key="weight">1</data>
+    </edge>
+    <edge source="n0" target="n13">
+      <data key="weight">3</data>
+    </edge>
+    <edge source="n0" target="n17">
+      <data key="weight">2</data>
+    </edge>
+    <edge source="n0" target="n19">
+      <data key="weight">2</data>
+    </edge>
+    <edge source="n0" target="n21">
+      <data key="weight">2</data>
+    </edge>
+    <edge source="n0" target="n31">
+      <data key="weight">2</data>
+    </edge>
+    <edge source="n1" target="n2">
+      <data key="weight">6</data>
+    </edge>
+    <edge source="n1" target="n3">
+      <data key="weight">3</data>
+    </edge>
+    <edge source="n1" target="n7">
+      <data key="weight">4</data>
+    </edge>
+    <edge source="n1" target="n13">
+      <data key="weight">5</data>
+    </edge>
+    <edge source="n1" target="n17">
+      <data key="weight">1</data>
+    </edge>
+    <edge source="n1" target="n19">
+      <data key="weight">2</data>
+    </edge>
+    <edge source="n1" target="n21">
+      <data key="weight">2</data>
+    </edge>
+    <edge source="n1" target="n30">
+      <data key="weight">2</data>
+    </edge>
+    <edge source="n2" target="n3">
+      <data key="weight">3</data>
+    </edge>
+    <edge source="n2" target="n7">
+      <data key="weight">4</data>
+    </edge>
+    <edge source="n2" target="n8">
+      <data key="weight">5</data>
+    </edge>
+    <edge source="n2" target="n9">
+      <data key="weight">1</data>
+    </edge>
+    <edge source="n2" target="n13">
+      <data key="weight">3</data>
+    </edge>
+    <edge source="n2" target="n27">
+      <data key="weight">2</data>
+    </edge>
+    <edge source="n2" target="n28">
+      <data key="weight">2</data>
+    </edge>
+    <edge source="n2" target="n32">
+      <data key="weight">2</data>
+    </edge>
+    <edge source="n3" target="n7">
+      <data key="weight">3</data>
+    </edge>
+    <edge source="n3" target="n12">
+      <data key="weight">3</data>
+    </edge>
+    <edge source="n3" target="n13">
+      <data key="weight">3</data>
+    </edge>
+    <edge source="n4" target="n6">
+      <data key="weight">2</data>
+    </edge>
+    <edge source="n4" target="n10">
+      <data key="weight">3</data>
+    </edge>
+    <edge source="n5" target="n6">
+      <data key="weight">5</data>
+    </edge>
+    <edge source="n5" target="n10">
+      <data key="weight">3</data>
+    </edge>
+    <edge source="n5" target="n16">
+      <data key="weight">3</data>
+    </edge>
+    <edge source="n6" target="n16">
+      <data key="weight">3</data>
+    </edge>
+    <edge source="n8" target="n30">
+      <data key="weight">3</data>
+    </edge>
+    <edge source="n8" target="n32">
+      <data key="weight">3</data>
+    </edge>
+    <edge source="n8" target="n33">
+      <data key="weight">4</data>
+    </edge>
+    <edge source="n9" target="n33">
+      <data key="weight">2</data>
+    </edge>
+    <edge source="n13" target="n33">
+      <data key="weight">3</data>
+    </edge>
+    <edge source="n14" target="n32">
+      <data key="weight">3</data>
+    </edge>
+    <edge source="n14" target="n33">
+      <data key="weight">2</data>
+    </edge>
+    <edge source="n15" target="n32">
+      <data key="weight">3</data>
+    </edge>
+    <edge source="n15" target="n33">
+      <data key="weight">4</data>
+    </edge>
+    <edge source="n18" target="n32">
+      <data key="weight">1</data>
+    </edge>
+    <edge source="n18" target="n33">
+      <data key="weight">2</data>
+    </edge>
+    <edge source="n19" target="n33">
+      <data key="weight">1</data>
+    </edge>
+    <edge source="n20" target="n32">
+      <data key="weight">3</data>
+    </edge>
+    <edge source="n20" target="n33">
+      <data key="weight">1</data>
+    </edge>
+    <edge source="n22" target="n32">
+      <data key="weight">2</data>
+    </edge>
+    <edge source="n22" target="n33">
+      <data key="weight">3</data>
+    </edge>
+    <edge source="n23" target="n25">
+      <data key="weight">5</data>
+    </edge>
+    <edge source="n23" target="n27">
+      <data key="weight">4</data>
+    </edge>
+    <edge source="n23" target="n29">
+      <data key="weight">3</data>
+    </edge>
+    <edge source="n23" target="n32">
+      <data key="weight">5</data>
+    </edge>
+    <edge source="n23" target="n33">
+      <data key="weight">4</data>
+    </edge>
+    <edge source="n24" target="n25">
+      <data key="weight">2</data>
+    </edge>
+    <edge source="n24" target="n27">
+      <data key="weight">3</data>
+    </edge>
+    <edge source="n24" target="n31">
+      <data key="weight">2</data>
+    </edge>
+    <edge source="n25" target="n31">
+      <data key="weight">7</data>
+    </edge>
+    <edge source="n26" target="n29">
+      <data key="weight">4</data>
+    </edge>
+    <edge source="n26" target="n33">
+      <data key="weight">2</data>
+    </edge>
+    <edge source="n27" target="n33">
+      <data key="weight">4</data>
+    </edge>
+    <edge source="n28" target="n31">
+      <data key="weight">2</data>
+    </edge>
+    <edge source="n28" target="n33">
+      <data key="weight">2</data>
+    </edge>
+    <edge source="n29" target="n32">
+      <data key="weight">4</data>
+    </edge>
+    <edge source="n29" target="n33">
+      <data key="weight">2</data>
+    </edge>
+    <edge source="n30" target="n32">
+      <data key="weight">3</data>
+    </edge>
+    <edge source="n30" target="n33">
+      <data key="weight">3</data>
+    </edge>
+    <edge source="n31" target="n32">
+      <data key="weight">4</data>
+    </edge>
+    <edge source="n31" target="n33">
+      <data key="weight">4</data>
+    </edge>
+    <edge source="n32" target="n33">
+      <data key="weight">5</data>
+    </edge>
+  </graph>
+</graphml>

@@ -1,0 +1,593 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="english" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="english" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>framework.netwalk_update &mdash; NetWalk  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> NetWalk
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">NetWalk</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>framework.netwalk_update</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for framework.netwalk_update</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Created on: 2018-12-24</span>
+<span class="sd">    License: BSD 3 clause</span>
+
+<span class="sd">    Copyright (C) 2018</span>
+<span class="sd">    Author: Wenchao Yu &lt;yuwenchao@ucla.edu&gt;</span>
+<span class="sd">    Affiliation: NEC Labs America</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">networkx</span> <span class="k">as</span> <span class="nn">nx</span>
+<span class="kn">from</span> <span class="nn">tqdm</span> <span class="k">import</span> <span class="n">tqdm</span>
+<span class="kn">from</span> <span class="nn">scipy.sparse</span> <span class="k">import</span> <span class="n">coo_matrix</span>
+<span class="kn">from</span> <span class="nn">scipy.sparse</span> <span class="k">import</span> <span class="n">csr_matrix</span>
+
+
+<div class="viewcode-block" id="Reservior"><a class="viewcode-back" href="../../framework.html#framework.netwalk_update.Reservior">[docs]</a><span class="k">class</span> <span class="nc">Reservior</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    class maintains a sketch of the dynamic graph</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">edges</span><span class="p">,</span> <span class="n">vertices</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">24</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reservior</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">degree</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">init_edges</span> <span class="o">=</span> <span class="n">edges</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vertices</span> <span class="o">=</span> <span class="n">vertices</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reservior_dim</span> <span class="o">=</span> <span class="n">dim</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">seed</span> <span class="o">=</span> <span class="n">seed</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__build</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">__build</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        construct initial reservior using the inital graph (edge list)</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># TODO: check matlab code</span>
+        <span class="c1"># TODO: currently implementation is for undirected graph</span>
+        <span class="n">g</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
+        <span class="n">g</span><span class="o">.</span><span class="n">add_edges_from</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">init_edges</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">vertices</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">g</span><span class="p">:</span>
+                <span class="n">nbrs</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="n">v</span><span class="p">))</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="p">)</span>
+                <span class="n">indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">nbrs</span><span class="p">),</span> <span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">reservior_dim</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">reservior</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">nbrs</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">indices</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">degree</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">nbrs</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">reservior</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">reservior_dim</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">degree</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+
+<div class="viewcode-block" id="Reservior.update"><a class="viewcode-back" href="../../framework.html#framework.netwalk_update.Reservior.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">edges</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        update the reservior based on the incoming edge(s)</span>
+<span class="sd">        :param edges: new incoming edges</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">edges</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">edge</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">edges</span><span class="p">):</span>
+            <span class="n">u</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">edge</span>
+
+            <span class="c1"># update u&#39;s reservior, edges can not be duplicated in the training and updating</span>
+            <span class="k">assert</span> <span class="n">v</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">reservior</span><span class="p">[</span><span class="n">u</span><span class="p">]</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">degree</span><span class="p">[</span><span class="n">u</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">degree</span><span class="p">[</span><span class="n">u</span><span class="p">],</span> <span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">reservior_dim</span><span class="p">)</span>
+            <span class="n">replace_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">indices</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">degree</span><span class="p">[</span><span class="n">u</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">reservior</span><span class="p">[</span><span class="n">u</span><span class="p">][</span><span class="n">replace_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
+
+            <span class="c1"># update v&#39;s reservior, edges can not be duplicated in the training and updating</span>
+            <span class="k">assert</span> <span class="n">u</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">reservior</span><span class="p">[</span><span class="n">v</span><span class="p">]</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">degree</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">degree</span><span class="p">[</span><span class="n">v</span><span class="p">],</span> <span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">reservior_dim</span><span class="p">)</span>
+            <span class="n">replace_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">indices</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">degree</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">reservior</span><span class="p">[</span><span class="n">v</span><span class="p">][</span><span class="n">replace_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">u</span></div></div>
+
+
+<div class="viewcode-block" id="WalkUpdate"><a class="viewcode-back" href="../../framework.html#framework.netwalk_update.WalkUpdate">[docs]</a><span class="k">class</span> <span class="nc">WalkUpdate</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;WalkUpdate update the Reservior and generate new batch of walks.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">init_edges</span><span class="p">,</span> <span class="n">vertices</span><span class="p">,</span> <span class="n">walk_len</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">walk_per_node</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">prev_percent</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">24</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">init_edges</span> <span class="o">=</span> <span class="n">init_edges</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">walk_len</span> <span class="o">=</span> <span class="n">walk_len</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">walk_per_node</span> <span class="o">=</span> <span class="n">walk_per_node</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prev_percent</span> <span class="o">=</span> <span class="n">prev_percent</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">seed</span> <span class="o">=</span> <span class="n">seed</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">reservior</span> <span class="o">=</span> <span class="n">Reservior</span><span class="p">(</span><span class="n">edges</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">init_edges</span><span class="p">,</span> <span class="n">vertices</span><span class="o">=</span><span class="n">vertices</span><span class="p">)</span>
+
+        <span class="c1"># previous walks</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prev_walks</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__init_walks</span><span class="p">()</span>
+
+        <span class="c1"># new generated walks</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">new_walks</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="c1"># training walks = new walks + &quot;percent&quot; * old walks</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">training_walks</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="nf">__init_walks</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initial walks generated from random walking</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">g</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
+        <span class="n">g</span><span class="o">.</span><span class="n">add_edges_from</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">init_edges</span><span class="p">)</span>
+        <span class="n">rand</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">Random</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="p">)</span>
+        <span class="n">walks</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">nodes</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">nodes</span><span class="p">())</span>
+        <span class="k">for</span> <span class="n">cnt</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">walk_per_node</span><span class="p">):</span>
+            <span class="n">rand</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">nodes</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">nodes</span><span class="p">:</span>
+                <span class="n">walks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__random_walk</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">rand</span><span class="o">=</span><span class="n">rand</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">walks</span>
+
+    <span class="k">def</span> <span class="nf">__random_walk</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">rand</span><span class="o">=</span><span class="n">random</span><span class="o">.</span><span class="n">Random</span><span class="p">(</span><span class="mi">0</span><span class="p">)):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        return a truncated random walk</span>
+<span class="sd">        :param alpha: probability of restars</span>
+<span class="sd">        :param start: the start node of the random walk</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">walk</span> <span class="o">=</span> <span class="p">[</span><span class="n">start</span><span class="p">]</span>
+
+        <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">walk</span><span class="p">)</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">walk_len</span><span class="p">:</span>
+            <span class="n">cur</span> <span class="o">=</span> <span class="n">walk</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="n">cur</span><span class="p">)))</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">rand</span><span class="o">.</span><span class="n">random</span><span class="p">()</span> <span class="o">&gt;=</span> <span class="n">alpha</span><span class="p">:</span>
+                    <span class="n">walk</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rand</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="n">cur</span><span class="p">))))</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">walk</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">walk</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">break</span>
+        <span class="k">return</span> <span class="n">walk</span>
+
+    <span class="k">def</span> <span class="nf">__generate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_edges</span><span class="p">,</span> <span class="n">update_type</span><span class="o">=</span><span class="s2">&quot;randomwalk&quot;</span><span class="p">):</span>
+        <span class="n">walk_set</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">rand</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">Random</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="p">)</span>
+
+        <span class="c1">## using random walk in the reservior for updating new set of walks for training</span>
+        <span class="c1"># it&#39;s slower but very accurate, it is probabilistically equal to do random walk</span>
+        <span class="c1"># in the whole graph with all edges so far arrived</span>
+        <span class="k">if</span> <span class="n">update_type</span> <span class="o">==</span> <span class="s2">&quot;randomwalk&quot;</span><span class="p">:</span>
+            <span class="n">start_node</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">edge</span> <span class="ow">in</span> <span class="n">new_edges</span><span class="p">:</span>
+                <span class="n">u</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">edge</span>
+                <span class="n">start_node</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">u</span><span class="p">)</span>
+                <span class="n">start_node</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">set</span><span class="p">(</span><span class="n">start_node</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">cnt</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">walk_per_node</span><span class="p">):</span>
+                    <span class="n">x</span> <span class="o">=</span> <span class="n">rand</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">reservior</span><span class="o">.</span><span class="n">reservior</span><span class="p">[</span><span class="n">n</span><span class="p">])</span>
+                    <span class="n">y</span> <span class="o">=</span> <span class="n">rand</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">reservior</span><span class="o">.</span><span class="n">reservior</span><span class="p">[</span><span class="n">x</span><span class="p">])</span>
+                    <span class="n">walk_set</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">n</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">])</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">new_walks</span> <span class="o">=</span> <span class="n">walk_set</span>
+            <span class="n">old_samples</span> <span class="o">=</span> <span class="p">[</span><span class="n">w</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">prev_walks</span> <span class="k">if</span> <span class="n">w</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">start_node</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">training_walks</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">new_walks</span> <span class="o">+</span> <span class="n">old_samples</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;length of training walks: </span><span class="si">%d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">training_walks</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">prev_walks</span> <span class="o">=</span> <span class="n">walk_set</span> <span class="o">+</span> <span class="n">old_samples</span>
+
+            <span class="k">return</span>
+
+        <span class="c1"># current implementation works for len = 3 and 4</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">walk_len</span> <span class="o">&lt;</span> <span class="mi">5</span>
+
+        <span class="c1"># decide the number of walk per node???</span>
+        <span class="k">for</span> <span class="n">edge</span> <span class="ow">in</span> <span class="n">new_edges</span><span class="p">:</span>
+            <span class="n">u</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">edge</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">walk_len</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+
+                <span class="c1">################</span>
+                <span class="n">walk_set</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">walk_set</span> <span class="k">if</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">v</span><span class="p">]</span>
+                <span class="n">walk_set</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">walk_set</span> <span class="k">if</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">u</span><span class="p">]</span>
+
+
+                <span class="c1"># walk u-v-x</span>
+                <span class="k">for</span> <span class="n">cnt</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">walk_per_node</span><span class="p">):</span>
+                    <span class="n">x</span> <span class="o">=</span> <span class="n">rand</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">reservior</span><span class="o">.</span><span class="n">reservior</span><span class="p">[</span><span class="n">v</span><span class="p">])</span>
+                    <span class="n">walk_set</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">x</span><span class="p">])</span>
+
+                <span class="c1"># walk v-u-x</span>
+                <span class="k">for</span> <span class="n">cnt</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">walk_per_node</span><span class="p">):</span>
+                    <span class="n">x</span> <span class="o">=</span> <span class="n">rand</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">reservior</span><span class="o">.</span><span class="n">reservior</span><span class="p">[</span><span class="n">u</span><span class="p">])</span>
+                    <span class="n">walk_set</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">v</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">x</span><span class="p">])</span>
+
+                <span class="c1">################</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">prev_walks</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">prev_walks</span> <span class="k">if</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">v</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">prev_walks</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">prev_walks</span> <span class="k">if</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">u</span><span class="p">]</span>
+
+
+
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">walk_len</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
+                <span class="c1"># walk u-v-xy</span>
+                <span class="k">for</span> <span class="n">cnt</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">walk_per_node</span><span class="p">):</span>
+                    <span class="n">x</span> <span class="o">=</span> <span class="n">rand</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">reservior</span><span class="o">.</span><span class="n">reservior</span><span class="p">[</span><span class="n">v</span><span class="p">])</span>
+                    <span class="n">y</span> <span class="o">=</span> <span class="n">rand</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">reservior</span><span class="o">.</span><span class="n">reservior</span><span class="p">[</span><span class="n">x</span><span class="p">])</span>
+                    <span class="n">walk_set</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">])</span>
+
+                <span class="c1"># walk v-u-xy</span>
+                <span class="k">for</span> <span class="n">cnt</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">walk_per_node</span><span class="p">):</span>
+                    <span class="n">x</span> <span class="o">=</span> <span class="n">rand</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">reservior</span><span class="o">.</span><span class="n">reservior</span><span class="p">[</span><span class="n">u</span><span class="p">])</span>
+                    <span class="n">y</span> <span class="o">=</span> <span class="n">rand</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">reservior</span><span class="o">.</span><span class="n">reservior</span><span class="p">[</span><span class="n">x</span><span class="p">])</span>
+                    <span class="n">walk_set</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">v</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">])</span>
+
+                <span class="c1"># walk x-u-v-y</span>
+                <span class="k">for</span> <span class="n">cnt</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">walk_per_node</span><span class="p">):</span>
+                    <span class="n">x</span> <span class="o">=</span> <span class="n">rand</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">reservior</span><span class="o">.</span><span class="n">reservior</span><span class="p">[</span><span class="n">u</span><span class="p">])</span>
+                    <span class="n">y</span> <span class="o">=</span> <span class="n">rand</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">reservior</span><span class="o">.</span><span class="n">reservior</span><span class="p">[</span><span class="n">v</span><span class="p">])</span>
+                    <span class="n">walk_set</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">x</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">y</span><span class="p">])</span>
+
+                <span class="c1"># walk x-v-u-y</span>
+                <span class="k">for</span> <span class="n">cnt</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">walk_per_node</span><span class="p">):</span>
+                    <span class="n">x</span> <span class="o">=</span> <span class="n">rand</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">reservior</span><span class="o">.</span><span class="n">reservior</span><span class="p">[</span><span class="n">v</span><span class="p">])</span>
+                    <span class="n">y</span> <span class="o">=</span> <span class="n">rand</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">reservior</span><span class="o">.</span><span class="n">reservior</span><span class="p">[</span><span class="n">u</span><span class="p">])</span>
+                    <span class="n">walk_set</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">x</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">y</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">pass</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">new_walks</span> <span class="o">=</span> <span class="n">walk_set</span>
+        <span class="n">old_samples</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">prev_walks</span><span class="c1">#random.sample(self.prev_walks, int(self.prev_percent * len(self.prev_walks)))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">training_walks</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">new_walks</span> <span class="o">+</span> <span class="n">old_samples</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prev_walks</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">training_walks</span>   <span class="c1">#self.prev_walks.extend(walk_set)</span>
+
+<div class="viewcode-block" id="WalkUpdate.update"><a class="viewcode-back" href="../../framework.html#framework.netwalk_update.WalkUpdate.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_edges</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Updating reservior and generate new set of walks for re-training using newly come edges</span>
+<span class="sd">        :param new_edges: newly arrived edges</span>
+<span class="sd">        :return: new set of training walks</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># update reservior</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reservior</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">new_edges</span><span class="p">)</span>
+
+        <span class="c1">## if reconduct randomwalk then the new set of walks are probabilistically equal to conducting</span>
+        <span class="c1">## randomwalk in the graph with all edges so far, it&#39;s slower than approximated method</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__generate</span><span class="p">(</span><span class="n">new_edges</span><span class="p">,</span> <span class="n">update_type</span><span class="o">=</span><span class="s2">&quot;randomwalk&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">training_walks</span></div></div>
+
+
+<div class="viewcode-block" id="NetWalk_update"><a class="viewcode-back" href="../../framework.html#framework.netwalk_update.NetWalk_update">[docs]</a><span class="k">class</span> <span class="nc">NetWalk_update</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Preparing both training initial graph walks and testing list of walks in each snapshot</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">walk_per_node</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">walk_len</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">init_percent</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">snap</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialization of data preparing</span>
+<span class="sd">        :param path: Could be either edge list file path, or the tuple including training and testing edge lists</span>
+<span class="sd">        :param walk_per_node: for each node, how many walks start from the node to be sampled</span>
+<span class="sd">        :param walk_len: the length of walk</span>
+<span class="sd">        :param init_percent: initial percentage of edges sampled for training</span>
+<span class="sd">        :param snap: number of edges in each time snapshot for updating</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data_path</span> <span class="o">=</span> <span class="n">path</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">walk_len</span> <span class="o">=</span> <span class="n">walk_len</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">init_percent</span> <span class="o">=</span> <span class="n">init_percent</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">snap</span> <span class="o">=</span> <span class="n">snap</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vertices</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">idx</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">walk_per_node</span> <span class="o">=</span> <span class="n">walk_per_node</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__get_data</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">test</span> <span class="o">=</span> <span class="n">path</span><span class="p">[</span><span class="mi">0</span><span class="p">][:,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span>
+            <span class="n">train</span> <span class="o">=</span> <span class="n">path</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__get_data_mat</span><span class="p">(</span><span class="n">test</span><span class="p">,</span> <span class="n">train</span><span class="p">)</span>
+
+
+        <span class="n">init_edges</span><span class="p">,</span> <span class="n">snapshots</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">walk_update</span> <span class="o">=</span> <span class="n">WalkUpdate</span><span class="p">(</span><span class="n">init_edges</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">vertices</span><span class="p">,</span> <span class="n">walk_len</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">walk_len</span><span class="p">,</span> <span class="n">walk_per_node</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">walk_per_node</span><span class="p">,</span> <span class="n">prev_percent</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">24</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__get_data_mat</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">test</span><span class="p">,</span> <span class="n">train</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generate initial walk list for training and list of walk lists in each upcoming snapshot</span>
+<span class="sd">        :param test: edge list for testing</span>
+<span class="sd">        :param train: edge list for training</span>
+<span class="sd">        :return: initial walk list for training and list of walk lists in each upcoming snapshot</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">edges</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">train</span><span class="p">,</span> <span class="n">test</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vertices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">edges</span><span class="p">)</span>
+        <span class="n">init_edges</span> <span class="o">=</span> <span class="n">train</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;total edges: </span><span class="si">%d</span><span class="s2">, initial edges: </span><span class="si">%d</span><span class="s2">; total vertices: </span><span class="si">%d</span><span class="s2">&quot;</span>
+              <span class="o">%</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">edges</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">init_edges</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vertices</span><span class="p">)))</span>
+
+        <span class="n">snapshots</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">current</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">while</span> <span class="n">current</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">test</span><span class="p">):</span>
+            <span class="c1"># if index &gt;= len(edges), equals to edges[current:]</span>
+            <span class="c1"># length of last snapshot &lt;= self.snap</span>
+            <span class="n">snapshots</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">test</span><span class="p">[</span><span class="n">current</span><span class="p">:</span><span class="n">current</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">snap</span><span class="p">])</span>
+            <span class="n">current</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">snap</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;number of snapshots: </span><span class="si">%d</span><span class="s2">, edges in each snapshot: </span><span class="si">%d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">snapshots</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">snap</span><span class="p">))</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">(</span><span class="n">init_edges</span><span class="p">,</span> <span class="n">snapshots</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">data</span>
+
+    <span class="k">def</span> <span class="nf">__get_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generate initial walk list for training and list of walk lists in each upcoming snapshot</span>
+<span class="sd">        :return: initial walk list for training and list of walk lists in each upcoming snapshot</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">edges</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data_path</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">comments</span><span class="o">=</span><span class="s1">&#39;%&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vertices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">edges</span><span class="p">)</span>
+        <span class="n">init_idx</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">edges</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">init_percent</span><span class="p">)</span>
+        <span class="n">init_edges</span> <span class="o">=</span> <span class="n">edges</span><span class="p">[:</span><span class="n">init_idx</span><span class="p">]</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;total edges: </span><span class="si">%d</span><span class="s2">, initial edges: </span><span class="si">%d</span><span class="s2">; total vertices: </span><span class="si">%d</span><span class="s2">&quot;</span>
+              <span class="o">%</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">edges</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">init_edges</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vertices</span><span class="p">)))</span>
+
+        <span class="n">snapshots</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">current</span> <span class="o">=</span> <span class="n">init_idx</span>
+        <span class="k">while</span> <span class="n">current</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">edges</span><span class="p">):</span>
+            <span class="c1"># if index &gt;= len(edges), equals to edges[current:]</span>
+            <span class="c1"># length of last snapshot &lt;= self.snap</span>
+            <span class="n">snapshots</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">edges</span><span class="p">[</span><span class="n">current</span><span class="p">:</span><span class="n">current</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">snap</span><span class="p">])</span>
+            <span class="n">current</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">snap</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;number of snapshots: </span><span class="si">%d</span><span class="s2">, edges in each snapshot: </span><span class="si">%d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">snapshots</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">snap</span><span class="p">))</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">(</span><span class="n">init_edges</span><span class="p">,</span> <span class="n">snapshots</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">data</span>
+
+<div class="viewcode-block" id="NetWalk_update.run"><a class="viewcode-back" href="../../framework.html#framework.netwalk_update.NetWalk_update.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        perform netwalk program with input data</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">init_edges</span><span class="p">,</span> <span class="n">snapshots</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span>
+        <span class="n">walk_update</span> <span class="o">=</span> <span class="n">WalkUpdate</span><span class="p">(</span><span class="n">init_edges</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">vertices</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">walk_per_node</span><span class="p">)</span>
+        <span class="c1"># call netwalk core</span>
+        <span class="c1"># save embedding</span>
+        <span class="c1"># save model</span>
+        <span class="k">for</span> <span class="n">snapshot</span> <span class="ow">in</span> <span class="n">snapshots</span><span class="p">:</span>
+            <span class="n">training_set</span> <span class="o">=</span> <span class="n">walk_update</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">snapshot</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">getOnehot</span><span class="p">(</span><span class="n">training_set</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">training_set</span><span class="p">)</span></div>
+            <span class="c1"># load model</span>
+            <span class="c1"># update embeddings</span>
+
+<div class="viewcode-block" id="NetWalk_update.getNumsnapshots"><a class="viewcode-back" href="../../framework.html#framework.netwalk_update.NetWalk_update.getNumsnapshots">[docs]</a>    <span class="k">def</span> <span class="nf">getNumsnapshots</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        get number of total time snapshots</span>
+<span class="sd">        :return: The number of total time snapshots</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">init_edges</span><span class="p">,</span> <span class="n">snapshots</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">snapshots</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="NetWalk_update.nextOnehotWalks"><a class="viewcode-back" href="../../framework.html#framework.netwalk_update.NetWalk_update.nextOnehotWalks">[docs]</a>    <span class="k">def</span> <span class="nf">nextOnehotWalks</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        get next list of walks for re-training in next time snapshot</span>
+<span class="sd">        :return: next list of walks for re-training in next time snapshot</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">hasNext</span><span class="p">():</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="n">_</span><span class="p">,</span> <span class="n">snapshots</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span>
+        <span class="n">snapshot</span> <span class="o">=</span> <span class="n">snapshots</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">idx</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">idx</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">training_set</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">walk_update</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">snapshot</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">getOnehot</span><span class="p">(</span><span class="n">training_set</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="NetWalk_update.hasNext"><a class="viewcode-back" href="../../framework.html#framework.netwalk_update.NetWalk_update.hasNext">[docs]</a>    <span class="k">def</span> <span class="nf">hasNext</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Checking if still has next snapshot</span>
+<span class="sd">        :return: true if has, or return false</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">init_edges</span><span class="p">,</span> <span class="n">snapshots</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">idx</span> <span class="o">&gt;=</span> <span class="nb">len</span><span class="p">(</span><span class="n">snapshots</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="NetWalk_update.getInitWalk"><a class="viewcode-back" href="../../framework.html#framework.netwalk_update.NetWalk_update.getInitWalk">[docs]</a>    <span class="k">def</span> <span class="nf">getInitWalk</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get inital walk list</span>
+<span class="sd">        :return: list of walks for initial training</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">walks</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">walk_update</span><span class="o">.</span><span class="n">prev_walks</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">getOnehot</span><span class="p">(</span><span class="n">walks</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="NetWalk_update.getOnehot"><a class="viewcode-back" href="../../framework.html#framework.netwalk_update.NetWalk_update.getOnehot">[docs]</a>    <span class="k">def</span> <span class="nf">getOnehot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">walks</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        transform walks with id number to one-hot walk list</span>
+<span class="sd">        :param walks: walk list</span>
+<span class="sd">        :return: one-hot walk list</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">walk_mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">walks</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+        <span class="n">rows</span> <span class="o">=</span> <span class="n">walk_mat</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+        <span class="n">cols</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">rows</span><span class="p">)))</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">rows</span><span class="p">)))</span>
+
+        <span class="n">coo</span> <span class="o">=</span> <span class="n">coo_matrix</span><span class="p">((</span><span class="n">data</span><span class="p">,</span> <span class="p">(</span><span class="n">rows</span><span class="p">,</span> <span class="n">cols</span><span class="p">)),</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vertices</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">rows</span><span class="p">)))</span>
+        <span class="n">onehot_walks</span> <span class="o">=</span> <span class="n">csr_matrix</span><span class="p">(</span><span class="n">coo</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">onehot_walks</span><span class="o">.</span><span class="n">toarray</span><span class="p">()</span></div></div>
+
+
+
+<span class="c1"># demo with dataset karate and emails</span>
+<span class="c1"># data without weight, undirected graph, no duplicate edges</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">data_path</span> <span class="o">=</span> <span class="s2">&quot;../../data/karate.edges&quot;</span><span class="c1">#&quot;&quot;../../data/karate/karate.edgelist&quot;</span>
+    <span class="n">netwalk</span> <span class="o">=</span> <span class="n">NetWalk_update</span><span class="p">(</span><span class="n">data_path</span><span class="p">)</span>
+    <span class="n">netwalk</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Wei Cheng(NEC Labs America) &amp; Wenchao Yu(UCLA)
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,7 @@
+NetWalk\_anomaly module
+=======================
+
+.. automodule:: NetWalk_anomaly
+    :members:
+    :undoc-members:
+    :show-inheritance:

@@ -1,0 +1,314 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="english" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="english" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>framework.DenoisingAE &mdash; NetWalk  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> NetWalk
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">NetWalk</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>framework.DenoisingAE</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for framework.DenoisingAE</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Created on: 2018-12-24</span>
+<span class="sd">    License: BSD 3 clause</span>
+
+<span class="sd">    Copyright (C) 2018</span>
+<span class="sd">    Author: Wei Cheng &lt;weicheng@nec-labs.com&gt;</span>
+<span class="sd">    Affiliation: NEC Labs America</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="nn">tf</span>
+
+
+<div class="viewcode-block" id="corrupt"><a class="viewcode-back" href="../../framework.html#framework.DenoisingAE.corrupt">[docs]</a><span class="k">def</span> <span class="nf">corrupt</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">),</span> <span class="n">tf</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">random_uniform</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">minval</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">maxval</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">),</span> <span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">))</span>
+    <span class="c1"># r = tf.multiply(x,tf.cast(tf.random_uniform(shape=tf.shape(x), minval=0.5, maxval=1.5, dtype=tf.float32), tf.float32))</span>
+    <span class="k">return</span> <span class="n">r</span></div>
+
+
+<span class="c1"># def kl_divergence(p, p_hat):</span>
+<span class="c1">#     return tf.reduce_mean(p * tf.log(tf.abs(p)) - p * tf.log(tf.abs(p_hat)) + (1 - p) * tf.log(1 - p) - (1 - p) * tf.log(1 - p_hat))</span>
+
+<div class="viewcode-block" id="autoencoder"><a class="viewcode-back" href="../../framework.html#framework.DenoisingAE.autoencoder">[docs]</a><span class="k">def</span> <span class="nf">autoencoder</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">corrupt_prob</span><span class="p">,</span> <span class="n">dimensions</span><span class="p">,</span> <span class="n">beta</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">rho</span> <span class="o">=</span> <span class="mf">0.4</span><span class="p">,</span> <span class="n">activation</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">sigmoid</span><span class="p">,</span> <span class="n">lamb</span> <span class="o">=</span> <span class="mf">0.01</span><span class="p">,</span> <span class="n">gamma</span> <span class="o">=</span><span class="mf">0.01</span><span class="p">):</span>
+    <span class="c1"># init_random = tf.random_normal_initializer(mean=0.0, stddev=1.0, seed=24, dtype=tf.float32)</span>
+    <span class="c1">#</span>
+    <span class="c1"># init_truncated = tf.truncated_normal_initializer(mean=0.0, stddev=1.0, seed=24, dtype=tf.float32)</span>
+    <span class="c1">#</span>
+    <span class="c1"># init_uniform = tf.random_uniform_initializer(minval=0, maxval=1, seed=24, dtype=tf.float32)</span>
+
+    <span class="n">init_uniform_unit</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">uniform_unit_scaling_initializer</span><span class="p">(</span><span class="n">factor</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">24</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+
+    <span class="c1"># init_variance_scaling_normal = tf.variance_scaling_initializer(scale=1.0, mode=&quot;fan_in&quot;,</span>
+    <span class="c1">#                                                                distribution=&quot;normal&quot;, seed=24, dtype=tf.float32)</span>
+    <span class="c1"># init_variance_scaling_uniform = tf.variance_scaling_initializer(scale=1.0, mode=&quot;fan_in&quot;,</span>
+    <span class="c1">#                                                                 distribution=&quot;uniform&quot;, seed=24, dtype=tf.float32)</span>
+    <span class="c1"># init_orthogonal = tf.orthogonal_initializer(gain=1.0, seed=None, dtype=tf.float32)</span>
+    <span class="c1"># init_glorot_uniform = tf.glorot_uniform_initializer()</span>
+    <span class="c1"># init_glorot_normal = tf.glorot_normal_initializer()</span>
+
+
+    <span class="c1"># x = tf.placeholder(tf.float32, [None, dimensions[0]], name=&#39;x&#39;)</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+
+    <span class="n">current_input</span> <span class="o">=</span> <span class="n">corrupt</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">*</span> <span class="n">corrupt_prob</span> <span class="o">+</span> <span class="n">x</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">corrupt_prob</span><span class="p">)</span>
+    <span class="n">noise_input</span> <span class="o">=</span> <span class="n">current_input</span>
+
+    <span class="n">weight_decay_J</span> <span class="o">=</span> <span class="mi">0</span>
+
+
+    <span class="c1"># Build the encoder</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;========= encoder begin ==========&quot;</span><span class="p">)</span>
+    <span class="n">encoder</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">encoder_b</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">layer_i</span><span class="p">,</span> <span class="n">n_output</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">dimensions</span><span class="p">[</span><span class="mi">1</span><span class="p">:]):</span>
+        <span class="n">n_input</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">current_input</span><span class="o">.</span><span class="n">get_shape</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;encoder : layer_i - n_output - n_input&quot;</span><span class="p">,</span> <span class="n">layer_i</span><span class="p">,</span> <span class="n">n_output</span><span class="p">,</span> <span class="n">n_input</span><span class="p">)</span>
+
+        <span class="c1">#W = tf.Variable(tf.random_uniform([n_output, n_input], -1.0 / math.sqrt(n_input), 1.0 / math.sqrt(n_input)))</span>
+
+        <span class="n">W_name</span> <span class="o">=</span> <span class="s2">&quot;W1_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">layer_i</span><span class="p">)</span>
+        <span class="n">W</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">get_variable</span><span class="p">(</span><span class="n">W_name</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">[</span><span class="n">n_output</span><span class="p">,</span> <span class="n">n_input</span><span class="p">],</span> <span class="n">initializer</span><span class="o">=</span><span class="n">init_uniform_unit</span><span class="p">)</span>
+
+        <span class="n">b</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_output</span><span class="p">]))</span>
+        <span class="n">encoder</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">W</span><span class="p">)</span>
+        <span class="n">encoder_b</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="n">activation</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">W</span><span class="p">,</span> <span class="n">current_input</span><span class="p">))</span><span class="o">+</span> <span class="n">b</span><span class="p">))</span>
+        <span class="n">current_input</span> <span class="o">=</span> <span class="n">output</span>
+        <span class="n">weight_decay_J</span> <span class="o">+=</span> <span class="p">(</span><span class="n">lamb</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">reduce_mean</span><span class="p">(</span><span class="n">W</span> <span class="o">**</span> <span class="mi">2</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;========= encoder finish =========&quot;</span><span class="p">)</span>
+    <span class="c1"># latent representation</span>
+    <span class="n">encoder_out</span> <span class="o">=</span> <span class="n">current_input</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">encoder_out</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+    <span class="c1">#encoder.reverse()</span>
+    <span class="c1"># Build the decoder using the same weights</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;========= decoder begin ==========&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">layer_i</span><span class="p">,</span> <span class="n">n_output</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">dimensions</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">][::</span><span class="o">-</span><span class="mi">1</span><span class="p">]):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;decoder : layer_i - n_output&quot;</span><span class="p">,</span> <span class="n">layer_i</span><span class="p">,</span> <span class="n">n_output</span><span class="p">)</span>
+        <span class="n">n_input</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">current_input</span><span class="o">.</span><span class="n">get_shape</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="c1">#W = tf.transpose(encoder[layer_i])  # transpose of the weights</span>
+
+        <span class="c1">#W = tf.Variable(tf.random_uniform([n_output, n_input], -1.0 / math.sqrt(n_input), 1.0 / math.sqrt(n_input)))</span>
+
+        <span class="n">W_name</span> <span class="o">=</span> <span class="s2">&quot;W2_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">layer_i</span><span class="p">)</span>
+        <span class="n">W</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">get_variable</span><span class="p">(</span><span class="n">W_name</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">[</span><span class="n">n_output</span><span class="p">,</span> <span class="n">n_input</span><span class="p">],</span> <span class="n">initializer</span><span class="o">=</span><span class="n">init_uniform_unit</span><span class="p">)</span>
+
+        <span class="n">b</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_output</span><span class="p">]))</span>
+
+        <span class="n">output</span> <span class="o">=</span> <span class="n">activation</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">W</span><span class="p">,</span> <span class="n">current_input</span><span class="p">))</span> <span class="o">+</span> <span class="n">b</span><span class="p">))</span>
+        <span class="n">current_input</span> <span class="o">=</span> <span class="n">output</span>
+        <span class="n">weight_decay_J</span> <span class="o">+=</span> <span class="p">(</span><span class="n">lamb</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">reduce_mean</span><span class="p">(</span><span class="n">W</span> <span class="o">**</span> <span class="mi">2</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;========= decoder finish =========&quot;</span><span class="p">)</span>
+    <span class="c1"># now have the reconstruction through the network</span>
+    <span class="n">reconstruction</span> <span class="o">=</span> <span class="n">current_input</span>
+    <span class="c1"># kl = tf.reduce_mean(-tf.nn.softmax_cross_entropy_with_logits(logits=z, labels=z/0.01))</span>
+    <span class="c1">#encoder.reverse()</span>
+    <span class="n">rhohats</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">reduce_mean</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">encoder_out</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
+
+    <span class="c1">#p = np.repeat([rho], encoder_out.get_shape().as_list()[0]).astype(np.float32)</span>
+    <span class="n">kl</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">reduce_mean</span><span class="p">(</span>
+        <span class="n">rho</span> <span class="o">*</span> <span class="n">tf</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">rho</span> <span class="o">/</span> <span class="n">rhohats</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">rho</span><span class="p">)</span> <span class="o">*</span> <span class="n">tf</span><span class="o">.</span><span class="n">log</span><span class="p">((</span><span class="mi">1</span> <span class="o">-</span> <span class="n">rho</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">rhohats</span><span class="p">)))</span>
+
+    <span class="c1">#m = data.get_shape().as_list()[1] * 1.0</span>
+    <span class="n">ae_loss</span> <span class="o">=</span> <span class="p">(</span><span class="n">gamma</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">)</span> <span class="o">*</span> <span class="n">tf</span><span class="o">.</span><span class="n">reduce_mean</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">reconstruction</span> <span class="o">-</span> <span class="n">x</span><span class="p">))</span>
+
+
+    <span class="n">kl_loss</span> <span class="o">=</span> <span class="n">beta</span> <span class="o">*</span> <span class="n">kl</span>
+    <span class="n">cost</span> <span class="o">=</span> <span class="n">ae_loss</span> <span class="o">+</span> <span class="n">kl_loss</span> <span class="o">+</span> <span class="n">weight_decay_J</span>
+    <span class="c1"># cost = 0.5 * tf.reduce_sum(tf.square(y - x))</span>
+
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="n">x</span><span class="p">,</span>
+        <span class="s1">&#39;encoder_out&#39;</span><span class="p">:</span> <span class="n">encoder_out</span><span class="p">,</span>
+        <span class="s1">&#39;reconstruction&#39;</span><span class="p">:</span> <span class="n">reconstruction</span><span class="p">,</span>
+        <span class="s1">&#39;corrupt_prob&#39;</span><span class="p">:</span> <span class="n">corrupt_prob</span><span class="p">,</span>
+        <span class="s1">&#39;cost&#39;</span><span class="p">:</span> <span class="n">cost</span><span class="p">,</span>
+        <span class="s1">&#39;noise_input&#39;</span><span class="p">:</span> <span class="n">noise_input</span><span class="p">,</span>
+        <span class="s1">&#39;kl&#39;</span><span class="p">:</span> <span class="n">kl</span><span class="p">,</span>
+        <span class="s1">&#39;weight_decay_J&#39;</span><span class="p">:</span> <span class="n">weight_decay_J</span><span class="p">,</span>
+        <span class="s1">&#39;ae_loss&#39;</span><span class="p">:</span> <span class="n">ae_loss</span><span class="p">,</span>
+        <span class="s1">&#39;kl_loss&#39;</span><span class="p">:</span> <span class="n">kl_loss</span><span class="p">,</span>
+        <span class="s1">&#39;W_list&#39;</span><span class="p">:</span> <span class="n">encoder</span><span class="p">,</span>
+        <span class="s1">&#39;b_list&#39;</span><span class="p">:</span> <span class="n">encoder_b</span>
+    <span class="p">}</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Wei Cheng(NEC Labs America) &amp; Wenchao Yu(UCLA)
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
