@@ -6,6 +6,8 @@ NetWalk: A Flexible Deep Embedding Approach for Anomaly Detection in Dynamic Net
 
 Bib: @inproceedings{Yu:2018:NFD:3219819.3220024, author = {Yu, Wenchao and Cheng, Wei and Aggarwal, Charu C. and Zhang, Kai and Chen, Haifeng and Wang, Wei}, title = {NetWalk: A Flexible Deep Embedding Approach for Anomaly Detection in Dynamic Networks}, booktitle = {Proceedings of the 24th ACM SIGKDD International Conference on Knowledge Discovery &#38; Data Mining}, series = {KDD '18}, year = {2018}, isbn = {978-1-4503-5552-0}, location = {London, United Kingdom}, pages = {2672--2681}, numpages = {10}, url = {http://doi.acm.org/10.1145/3219819.3220024}, doi = {10.1145/3219819.3220024}, acmid = {3220024}, publisher = {ACM}, address = {New York, NY, USA}, keywords = {anomaly detection, clique embedding, deep autoencoder, dynamic network embedding}, }
 
+Matlab version is also in the fold.
+
 Requirements for Run: We need python 3(2 also work) and tensorflow > 1.4
 
 1). Install using the Homebrew package manager:
